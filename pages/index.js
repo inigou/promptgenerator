@@ -1,8 +1,5 @@
-import { useEffect } from "react";
-
 export default function Home() {
-  useEffect(() => {
-    window.location.href = "/generar";
-  }, []);
-  return null;
+  return (
+    <meta httpEquiv="refresh" content="0; url=/generar" />
+  );
 }
