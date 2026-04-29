@@ -274,6 +274,7 @@ export default function Home() {
         <meta name="description" content="Genera el prompt perfecto para ChatGPT, Claude o Gemini en 30 segundos. Obtén respuestas de experto en viajes, salud, inmobiliario y cualquier tema. Gratis. Sin registro." />
         <meta name="keywords" content="generador de prompts, generador de prompts chatgpt, cómo hacer un buen prompt chatgpt, cómo preguntarle bien a la ia, prompt para planificar viaje chatgpt, prompt para consulta medica ia, prompt inmobiliario chatgpt, prompt generator español, hacer prompts ia, mejorar prompts chatgpt" />
         <link rel="canonical" href="https://www.promptbien.com/" />
+        <meta name="google-site-verification" content="e18aa69de57bb992" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.promptbien.com/" />
