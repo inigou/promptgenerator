@@ -230,11 +230,11 @@ const CSS = `
   .btn-cta-white:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(0,0,0,.25); }
   .cta-note { font-size: .82rem; font-weight: 600; color: rgba(255,255,255,.5); margin-top: 1rem; position: relative; z-index: 1; }
 
-  footer { background: var(--text); color: rgba(255,255,255,.4); padding: 40px clamp(1.5rem,5vw,4rem); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  footer { background: var(--text); color: rgba(255,255,255,.85); padding: 40px clamp(1.5rem,5vw,4rem); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
   .foot-logo { font-family: 'Nunito', sans-serif; font-size: 1.15rem; font-weight: 900; color: white; }
   .foot-logo span { color: var(--coral); }
   .foot-links { display: flex; gap: 1.5rem; font-size: .84rem; font-weight: 700; flex-wrap: wrap; }
-  .foot-links a { color: rgba(255,255,255,.55); text-decoration: none; transition: color .2s; }
+  .foot-links a { color: rgba(255,255,255,.85); text-decoration: none; transition: color .2s; }
   .foot-links a:hover { color: white; }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -528,7 +528,7 @@ export default function Home() {
 
       <footer>
         <div className="foot-logo">prompt<span>bien</span></div>
-        <nav className="foot-links" aria-label="Pie de página">
+        <div className="foot-links">
           <a href="/generar">Generador</a>
           <a href="/#como-funciona">Cómo funciona</a>
           <a href="/#precios">Precios</a>
@@ -536,8 +536,8 @@ export default function Home() {
           <a href="/privacidad">Privacidad</a>
           <a href="/terminos">Términos</a>
           <a href="/cookies">Cookies</a>
-        </nav>
-        <div style={{ fontSize: ".82rem", color: "rgba(255,255,255,.35)" }}>© 2026 promptbien.com</div>
+          </div>
+        <div style={{ fontSize: ".82rem", color: "rgba(219, 206, 206, 0.8)" }}>© 2026 promptbien.com</div>
       </footer>
     </>
   );
