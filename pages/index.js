@@ -62,11 +62,11 @@ const CSS = `
   body { font-family: 'Nunito', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(1.5rem,5vw,4rem); height: 66px; background: rgba(248,247,255,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
-  .nav-logo { font-family: 'Nunito', sans-serif; font-size: 1.45rem; font-weight: 900; color: var(--text); text-decoration: none; letter-spacing: -.02em; }
+  .nav-logo { font-family: 'Nunito', sans-serif; font-size: 1.45rem; font-weight: 900; color: var(--text); text-decoration: none; letter-spacing: -.02em; } text-decoration: none; letter-spacing: -.02em; }
   .nav-logo span { color: var(--coral); }
-  .nav-right { display: flex; align-items: center; gap: 14px; }
-  .nav-link { font-size: .88rem; font-weight: 700; color: var(--text-2); text-decoration: none; }
-  .nav-link:hover { color: var(--indigo); }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .nav-link-btn { font-size: .88rem; font-weight: 700; color: var(--text-2); text-decoration: none; padding: 10px 20px; border-radius: 100px; border: 1.5px solid var(--border); transition: all .2s; }
+  .nav-link-btn:hover { border-color: var(--indigo); color: var(--indigo); }
   .nav-cta { background: var(--coral); color: white; font-size: .88rem; font-weight: 800; padding: 10px 22px; border-radius: 100px; text-decoration: none; box-shadow: 0 4px 14px rgba(255,107,74,.35); transition: all .2s; }
   .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(255,107,74,.4); }
 
@@ -234,7 +234,7 @@ const CSS = `
   .foot-logo { font-family: 'Nunito', sans-serif; font-size: 1.15rem; font-weight: 900; color: white; }
   .foot-logo span { color: var(--coral); }
   .foot-links { display: flex; gap: 1.5rem; font-size: .84rem; font-weight: 700; flex-wrap: wrap; }
-  .foot-links a { color: rgba(255,255,255,.4); text-decoration: none; }
+  .foot-links a { color: rgba(255,255,255,.55); text-decoration: none; transition: color .2s; }
   .foot-links a:hover { color: white; }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -296,9 +296,8 @@ export default function Home() {
       <nav role="navigation" aria-label="Navegación principal">
         <a href="/" className="nav-logo">prompt<span>bien</span></a>
         <div className="nav-right">
-          <a href="#como-funciona" className="nav-link">Cómo funciona</a>
-          <a href="#precios" className="nav-link">Precios</a>
-          <a href="/generar" className="nav-cta">Generar gratis →</a>
+          <a href="/generar" className="nav-cta">✨ Nuevo prompt</a>
+          <a href="/mis-prompts" className="nav-link-btn">Mis prompts</a>
         </div>
       </nav>
 
@@ -530,14 +529,15 @@ export default function Home() {
       <footer>
         <div className="foot-logo">prompt<span>bien</span></div>
         <nav className="foot-links" aria-label="Pie de página">
-          <a href="/blog">Blog</a>
           <a href="/generar">Generador</a>
-          <a href="/#para-que-sirve">Para qué sirve</a>
+          <a href="/#como-funciona">Cómo funciona</a>
           <a href="/#precios">Precios</a>
           <a href="/#faq">FAQ</a>
           <a href="/privacidad">Privacidad</a>
+          <a href="/terminos">Términos</a>
+          <a href="/cookies">Cookies</a>
         </nav>
-        <div style={{ fontSize: ".82rem" }}>© 2026 promptbien.com</div>
+        <div style={{ fontSize: ".82rem", color: "rgba(255,255,255,.35)" }}>© 2026 promptbien.com</div>
       </footer>
     </>
   );

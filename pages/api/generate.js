@@ -1,24 +1,15 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./auth/[...nextauth]";
+import { createClient } from "@supabase/supabase-js";
 
-  console.log("KEY:", process.env.ANTHROPIC_API_KEY?.slice(0, 15));
-  const { ia, tema, situacion, objetivo } = req.body;
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
-  if (!situacion || !objetivo) {
-    return res.status(400).json({ error: 'Faltan datos' });
-  }
-
-  const systemPrompt = `Eres el mejor ingeniero de prompts del mundo. Tu única misión es transformar la situación concreta de un usuario en el prompt más eficaz posible para que obtenga una respuesta de calidad profesional de cualquier IA.
+const systemPrompt = `Eres el mejor ingeniero de prompts del mundo. Tu única misión es transformar la situación concreta de un usuario en el prompt más eficaz posible para que obtenga una respuesta de calidad profesional de cualquier IA.
 
 No respondes la pregunta del usuario. Generas el prompt que él usará para preguntársela a su IA.
-
-INPUTS QUE RECIBIRÁS:
-- IA_DESTINO: La IA donde usará el prompt
-- TEMA: El área temática
-- SITUACION: Descripción de su situación personal
-- OBJETIVO: Qué quiere conseguir exactamente
 
 REGLAS DE CONSTRUCCIÓN:
 
@@ -63,39 +54,89 @@ Copia el prompt completo y pégalo en [IA]. Si la respuesta no es suficientement
 
 ---`;
 
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const { ia, tema, situacion, objetivo, isFirstPrompt } = req.body;
+
+  if (!situacion || !objetivo) {
+    return res.status(400).json({ error: "Faltan datos" });
+  }
+
+  // Primer prompt: libre sin autenticación
+  if (isFirstPrompt) {
+    return await generateAndReturn(req, res, ia, tema, situacion, objetivo);
+  }
+
+  // Prompts adicionales: requieren sesión y créditos
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session) {
+    return res.status(401).json({ error: "login_required" });
+  }
+
+  // Comprueba si tiene créditos disponibles
+  const { data: userData } = await supabase
+    .from("users")
+    .select("prompts_used, prompts_paid")
+    .eq("email", session.user.email)
+    .single();
+
+  if (!userData) {
+    return res.status(404).json({ error: "Usuario no encontrado" });
+  }
+
+  const creditsAvailable = userData.prompts_paid - (userData.prompts_used - 1);
+
+  if (creditsAvailable <= 0) {
+    return res.status(402).json({ error: "payment_required" });
+  }
+
+  // Genera el prompt y descuenta el crédito
+  const result = await generateAndReturn(req, res, ia, tema, situacion, objetivo);
+
+  // Actualiza el contador
+  await supabase
+    .from("users")
+    .update({ prompts_used: userData.prompts_used + 1 })
+    .eq("email", session.user.email);
+
+  return result;
+}
+
+async function generateAndReturn(req, res, ia, tema, situacion, objetivo) {
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
+        "Content-Type": "application/json",
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: "claude-sonnet-4-20250514",
         max_tokens: 1024,
         system: systemPrompt,
         messages: [
           {
-            role: 'user',
-            content: `IA_DESTINO: ${ia}\nTEMA: ${tema}\nSITUACION: ${situacion}\nOBJETIVO: ${objetivo}`
-          }
-        ]
-      })
+            role: "user",
+            content: `IA_DESTINO: ${ia}\nTEMA: ${tema}\nSITUACION: ${situacion}\nOBJETIVO: ${objetivo}`,
+          },
+        ],
+      }),
     });
 
     const data = await response.json();
-    console.log("RESPUESTA ANTHROPIC:", JSON.stringify(data).slice(0, 300));
 
     if (!response.ok) {
-      return res.status(500).json({ error: data.error?.message || 'Error en la API' });
+      return res.status(500).json({ error: data.error?.message || "Error en la API" });
     }
 
-    const text = data.content?.[0]?.text || '';
+    const text = data.content?.[0]?.text || "";
     return res.status(200).json({ prompt: text });
-
   } catch (error) {
-    console.log("ERROR COMPLETO:", JSON.stringify(error));
-    return res.status(500).json({ error: error.message || 'Error generando el prompt' });
+    return res.status(500).json({ error: "Error generando el prompt" });
   }
 }

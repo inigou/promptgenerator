@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSession, signIn } from "next-auth/react";
 import Head from "next/head";
 
 const TEMAS = [
@@ -34,119 +35,42 @@ const PLACEHOLDERS = {
 };
 
 const TIPS = {
-  viajes: [
-    "Tu edad y con quién viajas",
-    "Fechas y días disponibles",
-    "Qué odias de los viajes típicos",
-    "Presupuesto aproximado",
-  ],
-  salud: [
-    "Tu edad y situación general",
-    "Diagnóstico o síntoma concreto",
-    "Medicación o historial relevante",
-    "Qué quieres preguntarle al médico",
-  ],
-  inmobiliario: [
-    "Tu situación financiera actual",
-    "Tipo de hipoteca y lo que queda",
-    "Zona o presupuesto si es compra",
-    "Qué decisión necesitas tomar",
-  ],
-  otro: [
-    "Tu contexto y punto de partida",
-    "Lo que ya sabes o has intentado",
-    "A qué nivel quieres la respuesta",
-    "Qué formato te sería más útil",
-  ],
+  viajes: ["Tu edad y con quién viajas", "Fechas y días disponibles", "Qué odias de los viajes típicos", "Presupuesto aproximado"],
+  salud: ["Tu edad y situación general", "Diagnóstico o síntoma concreto", "Medicación o historial relevante", "Qué quieres preguntarle al médico"],
+  inmobiliario: ["Tu situación financiera actual", "Tipo de hipoteca y lo que queda", "Zona o presupuesto si es compra", "Qué decisión necesitas tomar"],
+  otro: ["Tu contexto y punto de partida", "Lo que ya sabes o has intentado", "A qué nivel quieres la respuesta", "Qué formato te sería más útil"],
 };
 
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
+  body { font-family: 'Nunito', -apple-system, sans-serif; background: #5B4BF5; color: #FFF; min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 55% 45% at 15% 10%, rgba(255,107,74,0.18) 0%, transparent 55%), radial-gradient(ellipse 45% 40% at 85% 85%, rgba(48,209,88,0.1) 0%, transparent 55%), radial-gradient(ellipse 50% 55% at 75% 15%, rgba(255,255,255,0.06) 0%, transparent 55%); pointer-events: none; z-index: 0; }
 
-  body {
-    font-family: 'Nunito', -apple-system, sans-serif;
-    background: #5B4BF5;
-    color: #FFFFFF;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background:
-      radial-gradient(ellipse 55% 45% at 15% 10%, rgba(255,107,74,0.18) 0%, transparent 55%),
-      radial-gradient(ellipse 45% 40% at 85% 85%, rgba(48,209,88,0.1) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 55% at 75% 15%, rgba(255,255,255,0.06) 0%, transparent 55%);
-    pointer-events: none; z-index: 0;
-  }
-
-  .nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 clamp(1.25rem,5vw,2.5rem); height: 62px;
-    background: rgba(91,75,245,0.6);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(1.25rem,5vw,2.5rem); height: 62px; background: rgba(91,75,245,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); }
   .nav-logo { font-family: 'Nunito', sans-serif; font-size: 1.3rem; font-weight: 900; color: white; text-decoration: none; letter-spacing: -.02em; }
   .nav-logo span { color: #FF6B4A; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-user { font-size: .82rem; font-weight: 700; color: rgba(255,255,255,0.6); }
   .nav-back { font-size: .85rem; font-weight: 700; color: rgba(255,255,255,0.6); text-decoration: none; padding: 8px 18px; border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.2); transition: all .2s; }
-  .nav-back:hover { color: white; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.35); }
+  .nav-back:hover { color: white; background: rgba(255,255,255,0.1); }
 
-  /* LAYOUT: sidebar tips solo en desktop */
-  .page-layout {
-    position: relative; z-index: 1;
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    padding: 88px 1.25rem 100px;
-  }
+  .page-layout { position: relative; z-index: 1; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 88px 1.25rem 100px; }
+  .wrap { width: 100%; max-width: 520px; flex-shrink: 0; }
 
-  .wrap {
-    width: 100%; max-width: 520px;
-    flex-shrink: 0;
-  }
-
-  /* TIPS SIDEBAR — solo desktop */
-  .tips-sidebar {
-    position: fixed;
-    right: calc(50% - 520px - 240px);
-    top: 50%;
-    transform: translateY(-50%);
-    width: 200px;
-    opacity: 0;
-    transition: opacity .5s ease;
-    pointer-events: none;
-  }
+  .tips-sidebar { position: fixed; right: calc(50% - 520px - 240px); top: 50%; transform: translateY(-50%); width: 200px; opacity: 0; transition: opacity .5s ease; pointer-events: none; }
   .tips-sidebar.visible { opacity: 1; }
-
-  .tips-label {
-    font-size: .68rem; font-weight: 800; letter-spacing: .1em;
-    text-transform: uppercase; color: rgba(255,255,255,0.25);
-    margin-bottom: 14px;
-  }
-  .tip-line {
-    display: flex; align-items: flex-start; gap: 8px;
-    margin-bottom: 12px; opacity: 0;
-    transform: translateX(8px);
-    transition: opacity .4s ease, transform .4s ease;
-  }
+  .tips-label { font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px; }
+  .tip-line { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 12px; opacity: 0; transform: translateX(8px); transition: opacity .4s ease, transform .4s ease; }
   .tips-sidebar.visible .tip-line:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: .1s; }
   .tips-sidebar.visible .tip-line:nth-child(3) { opacity: 1; transform: translateX(0); transition-delay: .2s; }
   .tips-sidebar.visible .tip-line:nth-child(4) { opacity: 1; transform: translateX(0); transition-delay: .3s; }
   .tips-sidebar.visible .tip-line:nth-child(5) { opacity: 1; transform: translateX(0); transition-delay: .4s; }
   .tip-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.25); flex-shrink: 0; margin-top: 6px; }
   .tip-text { font-size: .82rem; font-weight: 600; color: rgba(255,255,255,0.35); line-height: 1.5; }
+  @media (max-width: 1100px) { .tips-sidebar { display: none; } }
 
-  /* Ocultar sidebar en mobile/tablet */
-  @media (max-width: 1100px) {
-    .tips-sidebar { display: none; }
-  }
-
-  /* PROGRESS */
   .progress { display: flex; gap: 6px; margin-bottom: 2.5rem; }
   .prog-bar { height: 5px; border-radius: 5px; flex: 1; background: rgba(255,255,255,0.15); transition: background .4s; }
   .prog-bar.done { background: #30D158; }
@@ -184,9 +108,16 @@ const CSS = `
   .field textarea::placeholder { color: rgba(255,255,255,0.22); }
   .field textarea:focus { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.12); }
 
-  .btn-main { width: 100%; padding: 17px; border-radius: 100px; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 900; transition: all .25s; letter-spacing: -.01em; background: #FF6B4A; color: white; box-shadow: 0 6px 24px rgba(255,107,74,0.45); }
+  .btn-main { width: 100%; padding: 17px; border-radius: 100px; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 900; transition: all .25s; background: #FF6B4A; color: white; box-shadow: 0 6px 24px rgba(255,107,74,0.45); }
   .btn-main:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255,107,74,0.55); }
   .btn-main:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-google { width: 100%; padding: 16px; border-radius: 100px; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800; transition: all .25s; background: white; color: #1a1a1a; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .btn-google:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,255,255,0.2); }
+  .btn-google-icon { width: 20px; height: 20px; }
+
+  .btn-pay { width: 100%; padding: 17px; border-radius: 100px; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 900; transition: all .25s; background: #FF6B4A; color: white; box-shadow: 0 6px 24px rgba(255,107,74,0.45); }
+  .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255,107,74,0.55); }
 
   .btn-outline { width: 100%; padding: 16px; border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: .97rem; font-weight: 700; color: rgba(255,255,255,0.6); margin-top: 10px; transition: all .2s; }
   .btn-outline:hover { border-color: rgba(255,255,255,0.4); color: white; }
@@ -196,22 +127,41 @@ const CSS = `
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-msg { font-size: .92rem; font-weight: 700; color: rgba(255,255,255,0.6); text-align: center; line-height: 1.5; }
   .loading-sub { font-size: .78rem; font-weight: 600; color: rgba(255,255,255,0.3); text-align: center; }
+
   .error-box { background: rgba(255,69,58,0.15); border: 1.5px solid rgba(255,69,58,0.35); border-radius: 16px; padding: 12px 16px; font-size: .9rem; font-weight: 700; color: #FF6B6B; margin-bottom: 14px; }
+
+  /* LOGIN WALL */
+  .wall { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 28px; padding: 36px 28px; text-align: center; }
+  .wall-emoji { font-size: 3rem; margin-bottom: 1rem; display: block; }
+  .wall-title { font-family: 'Nunito', sans-serif; font-size: 1.5rem; font-weight: 900; margin-bottom: .6rem; }
+  .wall-sub { font-size: .93rem; font-weight: 600; color: rgba(255,255,255,0.55); margin-bottom: 2rem; line-height: 1.65; }
+  .wall-price { display: inline-block; background: rgba(255,107,74,0.15); border: 1px solid rgba(255,107,74,0.3); color: #FF6B4A; font-size: .8rem; font-weight: 800; padding: 5px 14px; border-radius: 100px; margin-bottom: 1.5rem; }
+  .wall-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: rgba(255,255,255,0.25); font-size: .8rem; font-weight: 700; }
+  .wall-divider::before, .wall-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+
+  /* PAYMENT WALL */
+  .pay-wall { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 28px; padding: 36px 28px; text-align: center; }
+  .pay-amount { font-family: 'Nunito', sans-serif; font-size: 3.5rem; font-weight: 900; color: #FFD166; line-height: 1; margin-bottom: .2rem; }
+  .pay-per { font-size: .88rem; font-weight: 600; color: rgba(255,255,255,0.4); margin-bottom: 2rem; }
+  .pay-feats { list-style: none; text-align: left; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 10px; }
+  .pay-feats li { font-size: .92rem; font-weight: 600; color: rgba(255,255,255,0.75); display: flex; align-items: center; gap: 10px; }
+  .pay-feats li::before { content: "✓"; color: #30D158; font-weight: 900; flex-shrink: 0; }
 
   .result-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 1.25rem; }
   .result-title { font-family: 'Nunito', sans-serif; font-size: 1.7rem; font-weight: 900; letter-spacing: -.025em; line-height: 1.15; }
   .result-badge { background: rgba(48,209,88,0.18); border: 1.5px solid rgba(48,209,88,0.4); color: #30D158; border-radius: 100px; padding: 5px 14px; font-size: .75rem; font-weight: 800; white-space: nowrap; flex-shrink: 0; }
-
   .result-box { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 22px; padding: 22px; font-size: .95rem; font-weight: 600; line-height: 1.8; color: rgba(255,255,255,0.88); max-height: 380px; overflow-y: auto; margin-bottom: 14px; white-space: pre-wrap; }
   .result-box::-webkit-scrollbar { width: 4px; }
   .result-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
 
-  .copy-btn { width: 100%; padding: 17px; border-radius: 100px; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 900; border: none; cursor: pointer; transition: all .25s; background: white; color: #5B4BF5; letter-spacing: -.01em; }
+  .copy-btn { width: 100%; padding: 17px; border-radius: 100px; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 900; border: none; cursor: pointer; transition: all .25s; background: white; color: #5B4BF5; }
   .copy-btn.copied { background: #30D158; color: white; }
   .copy-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,255,255,0.2); }
 
   .tip-box { background: rgba(255,159,10,0.12); border: 1.5px solid rgba(255,159,10,0.25); border-radius: 18px; padding: 14px 18px; font-size: .86rem; font-weight: 600; color: rgba(255,255,255,0.6); line-height: 1.65; margin-top: 12px; }
   .tip-box em { color: #FF9F0A; font-style: normal; font-weight: 800; }
+
+  .credits-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(48,209,88,0.15); border: 1px solid rgba(48,209,88,0.3); color: #30D158; font-size: .75rem; font-weight: 800; padding: 5px 12px; border-radius: 100px; margin-bottom: 1rem; }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
   .step-enter { animation: fadeUp .32s ease both; }
@@ -221,6 +171,7 @@ const CSS = `
 `;
 
 export default function Generar() {
+  const { data: session } = useSession();
   const [step, setStep] = useState(1);
   const [tema, setTema] = useState(null);
   const [ia, setIa] = useState(null);
@@ -231,6 +182,14 @@ export default function Generar() {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
   const [tipsVisible, setTipsVisible] = useState(false);
+  const [wall, setWall] = useState(null); // null | "login" | "payment"
+  const [hasUsedFree, setHasUsedFree] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setHasUsedFree(localStorage.getItem("pb_free_used") === "1");
+    }
+  }, []);
 
   useEffect(() => {
     if (step === 3) {
@@ -244,18 +203,42 @@ export default function Generar() {
   const ph = PLACEHOLDERS[tema] || PLACEHOLDERS.otro;
   const tips = TIPS[tema] || TIPS.otro;
   const canGenerate = situacion.trim().length > 15 && objetivo.trim().length > 8;
+  const isFirstPrompt = !hasUsedFree;
 
   async function generatePrompt() {
     setLoading(true);
     setError("");
+    setWall(null);
+
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ia, tema, situacion, objetivo }),
+        body: JSON.stringify({ ia, tema, situacion, objetivo, isFirstPrompt }),
       });
+
       const data = await res.json();
+
+      if (res.status === 401 && data.error === "login_required") {
+        setWall("login");
+        setLoading(false);
+        return;
+      }
+
+      if (res.status === 402 && data.error === "payment_required") {
+        setWall("payment");
+        setLoading(false);
+        return;
+      }
+
       if (!res.ok) throw new Error(data.error || "Error generando el prompt");
+
+      // Marca el prompt gratis como usado
+      if (isFirstPrompt) {
+        localStorage.setItem("pb_free_used", "1");
+        setHasUsedFree(true);
+      }
+
       setResultado(data.prompt);
       setStep(4);
     } catch (e) {
@@ -274,8 +257,12 @@ export default function Generar() {
 
   function reset() {
     setStep(1); setTema(null); setIa(null);
-    setSituacion(""); setObjetivo(""); setResultado(""); setError("");
+    setSituacion(""); setObjetivo(""); setResultado(""); setError(""); setWall(null);
   }
+
+  const credits = session
+    ? (session.user.prompts_paid || 0) - ((session.user.prompts_used || 1) - 1)
+    : 0;
 
   return (
     <>
@@ -288,10 +275,16 @@ export default function Generar() {
 
       <nav className="nav">
         <a href="/" className="nav-logo">prompt<span>bien</span></a>
-        <a href="/" className="nav-back">← Inicio</a>
+        <div className="nav-right">
+          {session && (
+            <span className="nav-user">
+              {credits > 0 ? `${credits} prompt${credits > 1 ? "s" : ""} disponible${credits > 1 ? "s" : ""}` : session.user.email?.split("@")[0]}
+            </span>
+          )}
+          <a href="/" className="nav-back">← Inicio</a>
+        </div>
       </nav>
 
-      {/* TIPS SIDEBAR — solo visible en desktop en paso 3 */}
       <div className={"tips-sidebar" + (tipsVisible ? " visible" : "")}>
         <div className="tips-label">Incluye en tu caso</div>
         {tips.map((tip, i) => (
@@ -304,7 +297,8 @@ export default function Generar() {
 
       <div className="page-layout">
         <div className="wrap">
-          {step < 4 && (
+
+          {step < 4 && !wall && (
             <div className="progress">
               {["Tema", "IA", "Caso", "Prompt"].map((_, i) => (
                 <div key={i} className={"prog-bar" + (step > i + 1 ? " done" : step === i + 1 ? " active" : "")} />
@@ -312,15 +306,15 @@ export default function Generar() {
             </div>
           )}
 
-          {step === 1 && (
+          {/* STEP 1 */}
+          {step === 1 && !wall && (
             <div className="step-enter">
               <div className="step-chip"><div className="step-dot" />Paso 1 de 3</div>
               <h1>Sobre que quieres consultar?</h1>
               <p className="sub">Elige el area y asignamos el experto adecuado.</p>
               <div className="tema-grid">
                 {TEMAS.map(t => (
-                  <button key={t.id}
-                    className={"tema-card" + (tema === t.id ? " active" : "")}
+                  <button key={t.id} className={"tema-card" + (tema === t.id ? " active" : "")}
                     onClick={() => { setTema(t.id); setTimeout(() => setStep(2), 150); }}
                     style={tema === t.id ? { borderColor: t.border, background: t.bg } : {}}>
                     <span className="tema-emoji">{t.emoji}</span>
@@ -332,7 +326,8 @@ export default function Generar() {
             </div>
           )}
 
-          {step === 2 && (
+          {/* STEP 2 */}
+          {step === 2 && !wall && (
             <div className="step-enter">
               <button className="back-btn" onClick={() => setStep(1)}>← Volver</button>
               <div className="step-chip"><div className="step-dot" />Paso 2 de 3</div>
@@ -340,8 +335,7 @@ export default function Generar() {
               <p className="sub">Adaptamos el prompt para sacarle el maximo a cada una.</p>
               <div className="ia-list">
                 {IAS.map(i => (
-                  <button key={i.id}
-                    className={"ia-card" + (ia === i.id ? " active" : "")}
+                  <button key={i.id} className={"ia-card" + (ia === i.id ? " active" : "")}
                     onClick={() => { setIa(i.id); setTimeout(() => setStep(3), 150); }}
                     style={ia === i.id ? { borderColor: i.border, background: i.bg } : {}}>
                     <span className="ia-emoji">{i.emoji}</span>
@@ -356,12 +350,19 @@ export default function Generar() {
             </div>
           )}
 
-          {step === 3 && (
+          {/* STEP 3 */}
+          {step === 3 && !wall && (
             <div className="step-enter">
               <button className="back-btn" onClick={() => setStep(2)}>← Volver</button>
               <div className="step-chip"><div className="step-dot" />Paso 3 de 3</div>
               <h1>Cuentanos tu caso</h1>
               <p className="sub">Mas detalle = prompt mas personalizado.</p>
+              {isFirstPrompt && (
+                <div className="credits-badge">✨ Tu primer prompt es gratis</div>
+              )}
+              {session && credits > 0 && (
+                <div className="credits-badge">⚡ {credits} prompt{credits > 1 ? "s" : ""} disponible{credits > 1 ? "s" : ""}</div>
+              )}
               <div className="field">
                 <label className="field-label">Tu situacion</label>
                 <textarea rows={4} value={situacion} onChange={e => setSituacion(e.target.value)} placeholder={ph.situacion} />
@@ -372,19 +373,75 @@ export default function Generar() {
               </div>
               {error && <div className="error-box">{error}</div>}
               <button className="btn-main" disabled={!canGenerate || loading} onClick={generatePrompt}>
-                {loading ? "Generando tu prompt..." : "Generar mi prompt"}
+                {loading ? "Generando tu prompt..." : isFirstPrompt ? "Generar mi prompt gratis" : "Generar mi prompt"}
               </button>
               {loading && (
                 <div className="loading-wrap">
                   <div className="loading-spinner" />
                   <div className="loading-msg">Construyendo tu prompt personalizado...</div>
-                  <div className="loading-sub">Puede tardar hasta 15 segundos. ¡Vale la pena! ☕</div>
+                  <div className="loading-sub">Puede tardar hasta 15 segundos. Vale la pena! ☕</div>
                 </div>
               )}
             </div>
           )}
 
-          {step === 4 && resultado && (
+          {/* LOGIN WALL */}
+          {wall === "login" && (
+            <div className="step-enter">
+              <div className="wall">
+                <span className="wall-emoji">🔐</span>
+                <h1 className="wall-title">Un segundo!</h1>
+                <p className="wall-sub">Tu primer prompt fue gratis. Para seguir generando prompts, entra con Google — es un clic y guardamos tus creditos automaticamente.</p>
+                <div className="wall-price">Solo 1,49€ por prompt · Sin suscripcion</div>
+                <button className="btn-google" onClick={() => signIn("google", { callbackUrl: "/generar" })}>
+                  <svg className="btn-google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                  Continuar con Google
+                </button>
+                <div className="wall-divider">o</div>
+                <button className="btn-outline" onClick={() => setWall(null)}>Volver atras</button>
+                <p style={{ fontSize: ".75rem", fontWeight: 600, color: "rgba(255,255,255,0.3)", marginTop: 16, lineHeight: 1.6, textAlign: "center" }}>
+                  Al continuar aceptas nuestros{" "}
+                  <a href="/terminos" style={{ color: "rgba(255,255,255,0.5)" }}>Términos</a>
+                  {" "}y{" "}
+                  <a href="/privacidad" style={{ color: "rgba(255,255,255,0.5)" }}>Privacidad</a>
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* PAYMENT WALL */}
+          {wall === "payment" && (
+            <div className="step-enter">
+              <div className="pay-wall">
+                <span className="wall-emoji">⚡</span>
+                <h1 className="wall-title">Genera tu proximo prompt</h1>
+                <div className="pay-amount">1,49€</div>
+                <div className="pay-per">por prompt · pago puntual · sin suscripcion</div>
+                <ul className="pay-feats">
+                  <li>Prompt personalizado con experto de primer nivel</li>
+                  <li>Adaptado a tu IA — ChatGPT, Claude o Gemini</li>
+                  <li>Listo para copiar y pegar al instante</li>
+                  <li>Menos que un cafe, mas util que cualquier busqueda</li>
+                </ul>
+                <a
+                  href={process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || "#"}
+                  className="btn-pay"
+                  style={{ display: "block", textAlign: "center", textDecoration: "none" }}
+                >
+                  Pagar 1,49€ con Stripe
+                </a>
+                <button className="btn-outline" onClick={() => setWall(null)}>Volver atras</button>
+              </div>
+            </div>
+          )}
+
+          {/* RESULT */}
+          {step === 4 && resultado && !wall && (
             <div className="step-enter">
               <div className="result-header">
                 <div className="result-title">Tu prompt esta listo!</div>
@@ -400,7 +457,26 @@ export default function Generar() {
               </div>
             </div>
           )}
+
         </div>
+      </div>
+
+      {/* Mini footer legal */}
+      <div style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        display: "flex", justifyContent: "center", gap: 20,
+        padding: "10px", zIndex: 50,
+        background: "rgba(91,75,245,0.5)",
+        backdropFilter: "blur(10px)",
+        borderTop: "1px solid rgba(255,255,255,0.08)",
+      }}>
+        {[["Privacidad", "/privacidad"], ["Términos", "/terminos"], ["Cookies", "/cookies"]].map(([label, href]) => (
+          <a key={href} href={href} style={{
+            fontSize: ".73rem", fontWeight: 700,
+            color: "rgba(255,255,255,0.3)", textDecoration: "none",
+            transition: "color .2s",
+          }}>{label}</a>
+        ))}
       </div>
     </>
   );
