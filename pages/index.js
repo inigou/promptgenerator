@@ -61,13 +61,13 @@ const CSS = `
   html { scroll-behavior: smooth; }
   body { font-family: 'Nunito', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(1.5rem,5vw,4rem); height: 66px; background: rgba(248,247,255,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
-  .nav-logo { font-family: 'Nunito', sans-serif; font-size: 1.45rem; font-weight: 900; color: var(--text); text-decoration: none; letter-spacing: -.02em; } text-decoration: none; letter-spacing: -.02em; }
-  .nav-logo span { color: var(--coral); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(1.5rem,5vw,4rem); height: 66px; background: rgba(255,255,255,0.97); backdrop-filter: blur(16px); border-bottom: 1px solid #E8E8F5; }
+  .nav-logo { font-family: 'Nunito', sans-serif; font-size: 1.45rem; font-weight: 900; color: #1A1A2E; text-decoration: none; letter-spacing: -.02em; }
+  .nav-logo span { color: #FF6B4A; }
   .nav-right { display: flex; align-items: center; gap: 10px; }
-  .nav-link-btn { font-size: .88rem; font-weight: 700; color: var(--text-2); text-decoration: none; padding: 10px 20px; border-radius: 100px; border: 1.5px solid var(--border); transition: all .2s; }
-  .nav-link-btn:hover { border-color: var(--indigo); color: var(--indigo); }
-  .nav-cta { background: var(--coral); color: white; font-size: .88rem; font-weight: 800; padding: 10px 22px; border-radius: 100px; text-decoration: none; box-shadow: 0 4px 14px rgba(255,107,74,.35); transition: all .2s; }
+  .nav-link-btn { font-size: .88rem; font-weight: 700; color: #4A4A6A; text-decoration: none; padding: 10px 20px; border-radius: 100px; border: 1.5px solid #E0E0F0; transition: all .2s; background: white; }
+  .nav-link-btn:hover { border-color: #5B4BF5; color: #5B4BF5; }
+  .nav-cta { background: #FF6B4A; color: white; font-size: .88rem; font-weight: 800; padding: 10px 22px; border-radius: 100px; text-decoration: none; box-shadow: 0 4px 14px rgba(255,107,74,.35); transition: all .2s; }
   .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(255,107,74,.4); }
 
   .hero { min-height: 100vh; padding: 110px clamp(1.5rem,5vw,4rem) 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: var(--indigo); position: relative; overflow: hidden; }
