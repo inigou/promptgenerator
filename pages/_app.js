@@ -1,5 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import { useState, useEffect } from "react";
+import Script from "next/script";
 
 function CookieBanner() {
   const [visible, setVisible] = useState(false);
@@ -65,6 +66,19 @@ function CookieBanner() {
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
+      {/* Google Analytics */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-Z6BMLC73FW"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z6BMLC73FW');
+        `}
+      </Script>
       <Component {...pageProps} />
       <CookieBanner />
     </SessionProvider>
