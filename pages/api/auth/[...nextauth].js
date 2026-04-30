@@ -27,7 +27,7 @@ export const authOptions = {
           await supabase.from("users").insert({
             email: user.email,
             google_id: user.id,
-            prompts_used: 1,
+            prompts_used: 0,
             prompts_paid: 0,
           });
         }

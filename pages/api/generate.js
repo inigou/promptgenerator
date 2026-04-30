@@ -59,54 +59,55 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { ia, tema, situacion, objetivo, isFirstPrompt } = req.body;
+  const { ia, tema, situacion, objetivo } = req.body;
 
   if (!situacion || !objetivo) {
     return res.status(400).json({ error: "Faltan datos" });
   }
 
-  // Primer prompt: libre sin autenticación
-  if (isFirstPrompt) {
-    return await generateAndReturn(req, res, ia, tema, situacion, objetivo);
-  }
-
-  // Prompts adicionales: requieren sesión y créditos
+  // Siempre requiere sesión
   const session = await getServerSession(req, res, authOptions);
-
   if (!session) {
     return res.status(401).json({ error: "login_required" });
   }
 
-  // Comprueba si tiene créditos disponibles
-  const { data: userData } = await supabase
+  // Obtiene datos del usuario en Supabase
+  const { data: userData, error: dbError } = await supabase
     .from("users")
     .select("prompts_used, prompts_paid")
     .eq("email", session.user.email)
     .single();
 
-  if (!userData) {
+  if (dbError || !userData) {
     return res.status(404).json({ error: "Usuario no encontrado" });
   }
 
-  const creditsAvailable = userData.prompts_paid - (userData.prompts_used - 1);
+  const { prompts_used, prompts_paid } = userData;
 
+  // Primer prompt: gratis (prompts_used === 0)
+  if (prompts_used === 0) {
+    await supabase
+      .from("users")
+      .update({ prompts_used: 1 })
+      .eq("email", session.user.email);
+    return await generatePrompt(res, ia, tema, situacion, objetivo);
+  }
+
+  // Prompts adicionales: necesita créditos
+  const creditsAvailable = prompts_paid - (prompts_used - 1);
   if (creditsAvailable <= 0) {
     return res.status(402).json({ error: "payment_required" });
   }
 
-  // Genera el prompt y descuenta el crédito
-  const result = await generateAndReturn(req, res, ia, tema, situacion, objetivo);
-
-  // Actualiza el contador
+  // Actualiza primero, genera después
   await supabase
     .from("users")
-    .update({ prompts_used: userData.prompts_used + 1 })
+    .update({ prompts_used: prompts_used + 1 })
     .eq("email", session.user.email);
-
-  return result;
+  return await generatePrompt(res, ia, tema, situacion, objetivo);
 }
 
-async function generateAndReturn(req, res, ia, tema, situacion, objetivo) {
+async function generatePrompt(res, ia, tema, situacion, objetivo) {
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
