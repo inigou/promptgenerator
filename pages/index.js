@@ -108,7 +108,7 @@ const CSS = `
   h2 { font-family: 'Nunito', sans-serif; font-size: clamp(1.9rem,4vw,2.9rem); font-weight: 900; line-height: 1.1; letter-spacing: -.025em; margin-bottom: 1rem; color: var(--text); }
   .lead { font-size: 1.05rem; font-weight: 600; color: var(--text-2); max-width: 580px; line-height: 1.75; }
   .ctr { text-align: center; }
-  .ctr .lead { margin: 0 auto; }
+  .ctr .lead { margin: 0 auto; text-align: center; }
 
   .problem-sec { background: white; }
   .problems-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin-top: 3rem; }
@@ -274,7 +274,6 @@ export default function Home() {
         <meta name="description" content="Genera el prompt perfecto para ChatGPT, Claude o Gemini en 30 segundos. Obtén respuestas de experto en viajes, salud, inmobiliario y cualquier tema. Gratis. Sin registro." />
         <meta name="keywords" content="generador de prompts, generador de prompts chatgpt, cómo hacer un buen prompt chatgpt, cómo preguntarle bien a la ia, prompt para planificar viaje chatgpt, prompt para consulta medica ia, prompt inmobiliario chatgpt, prompt generator español, hacer prompts ia, mejorar prompts chatgpt" />
         <link rel="canonical" href="https://www.promptbien.com/" />
-        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.promptbien.com/" />

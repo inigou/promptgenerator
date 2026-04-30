@@ -191,7 +191,11 @@ const CSS = `
   .btn-outline { width: 100%; padding: 16px; border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: .97rem; font-weight: 700; color: rgba(255,255,255,0.6); margin-top: 10px; transition: all .2s; }
   .btn-outline:hover { border-color: rgba(255,255,255,0.4); color: white; }
 
-  .loading-text { text-align: center; font-size: .85rem; font-weight: 600; color: rgba(255,255,255,0.4); margin-top: 14px; font-style: italic; }
+  .loading-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 18px; }
+  .loading-spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.1); border-top-color: rgba(255,255,255,0.7); animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-msg { font-size: .92rem; font-weight: 700; color: rgba(255,255,255,0.6); text-align: center; line-height: 1.5; }
+  .loading-sub { font-size: .78rem; font-weight: 600; color: rgba(255,255,255,0.3); text-align: center; }
   .error-box { background: rgba(255,69,58,0.15); border: 1.5px solid rgba(255,69,58,0.35); border-radius: 16px; padding: 12px 16px; font-size: .9rem; font-weight: 700; color: #FF6B6B; margin-bottom: 14px; }
 
   .result-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 1.25rem; }
@@ -370,7 +374,13 @@ export default function Generar() {
               <button className="btn-main" disabled={!canGenerate || loading} onClick={generatePrompt}>
                 {loading ? "Generando tu prompt..." : "Generar mi prompt"}
               </button>
-              {loading && <p className="loading-text">Construyendo el mejor prompt para tu situacion...</p>}
+              {loading && (
+                <div className="loading-wrap">
+                  <div className="loading-spinner" />
+                  <div className="loading-msg">Construyendo tu prompt personalizado...</div>
+                  <div className="loading-sub">Puede tardar hasta 15 segundos. ¡Vale la pena! ☕</div>
+                </div>
+              )}
             </div>
           )}
 
