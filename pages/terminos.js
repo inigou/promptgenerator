@@ -53,7 +53,7 @@ export default function Terminos() {
         <p>promptbien.com es una herramienta web que genera prompts personalizados para sistemas de inteligencia artificial como ChatGPT, Claude y Gemini. El servicio funciona de la siguiente manera:</p>
         <ul>
           <li>El primer prompt es completamente gratuito y no requiere registro</li>
-          <li>Los prompts adicionales tienen un coste de 1,49€ por prompt</li>
+          <li>Los prompts adicionales tienen un coste de 1,99€ por prompt</li>
           <li>Para acceder a prompts de pago es necesario registrarse mediante Google</li>
         </ul>
 
@@ -63,7 +63,7 @@ export default function Terminos() {
         <h2>4. Condiciones de pago</h2>
         <p>Los pagos se procesan a través de Stripe, plataforma de pago segura. Al realizar un pago aceptas:</p>
         <ul>
-          <li>Que el importe de 1,49€ por prompt se cargará en tu método de pago en el momento de la compra</li>
+          <li>Que el importe de 1,99€ por prompt se cargará en tu método de pago en el momento de la compra</li>
           <li>Que los créditos adquiridos no tienen fecha de caducidad</li>
           <li>Que los pagos no son reembolsables una vez que el prompt ha sido generado</li>
           <li>Que eres el titular o tienes autorización para usar el método de pago empleado</li>

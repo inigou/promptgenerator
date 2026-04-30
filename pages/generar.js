@@ -294,7 +294,7 @@ export default function Generar() {
               <div className="pay-wall">
                 <span className="wall-emoji">⚡</span>
                 <h1 className="wall-title">Genera tu siguiente prompt</h1>
-                <div className="pay-amount">1,49€</div>
+                <div className="pay-amount">1,99€</div>
                 <div className="pay-per">por prompt · pago puntual · sin suscripción</div>
                 <ul className="pay-feats">
                   <li>Prompt personalizado con experto de primer nivel</li>
@@ -307,7 +307,7 @@ export default function Generar() {
                   className="btn-pay"
                   style={{ display: "block", textAlign: "center", textDecoration: "none" }}
                 >
-                  Pagar 1,49€ con Stripe
+                  Pagar 1,99€ con Stripe
                 </a>
                 <button className="btn-outline" onClick={() => setWall(null)}>Volver atrás</button>
               </div>

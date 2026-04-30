@@ -22,9 +22,9 @@ const schemaFAQ = {
     { "@type": "Question", "name": "Como hacer un buen prompt para ChatGPT?", "acceptedAnswer": { "@type": "Answer", "text": "Un buen prompt para ChatGPT necesita cuatro elementos: un rol de experto especifico, tu situacion concreta con todos los detalles relevantes, el objetivo preciso que quieres conseguir, y las instrucciones sobre el formato de respuesta. promptbien.com construye todo esto automaticamente en 30 segundos." } },
     { "@type": "Question", "name": "Para que sirve un prompt bien escrito?", "acceptedAnswer": { "@type": "Answer", "text": "Un prompt bien escrito transforma la respuesta de la IA de un texto generico de blog a una consulta personalizada de experto. La misma IA da respuestas radicalmente distintas dependiendo de como le preguntas." } },
     { "@type": "Question", "name": "Funciona para viajes, salud e inmobiliario?", "acceptedAnswer": { "@type": "Answer", "text": "Si. promptbien tiene prompts especialmente optimizados para planificar viajes con ChatGPT, preparar consultas medicas, y tomar decisiones inmobiliarias. Tambien funciona para cualquier otro tema con la opcion de consulta libre." } },
-    { "@type": "Question", "name": "Es gratis el generador de prompts?", "acceptedAnswer": { "@type": "Answer", "text": "Tu primer prompt es completamente gratuito, sin registro. A partir del segundo, cada prompt tiene un coste de 1,49 euros de pago puntual. Sin suscripcion, sin compromiso, sin cuenta necesaria." } },
+    { "@type": "Question", "name": "Es gratis el generador de prompts?", "acceptedAnswer": { "@type": "Answer", "text": "Tu primer prompt es completamente gratuito, sin registro. A partir del segundo, cada prompt tiene un coste de 1,99 euros de pago puntual. Sin suscripcion, sin compromiso, sin cuenta necesaria." } },
     { "@type": "Question", "name": "Funciona con Claude y Gemini ademas de ChatGPT?", "acceptedAnswer": { "@type": "Answer", "text": "Si. Al iniciar el proceso seleccionas la IA que usaras y el prompt se adapta especificamente para ella. ChatGPT, Claude y Gemini tienen caracteristicas distintas y los prompts generados estan optimizados para cada una." } },
-    { "@type": "Question", "name": "Como funciona el precio por prompt?", "acceptedAnswer": { "@type": "Answer", "text": "El primer prompt es gratis para que compruebes el valor antes de pagar. A partir del segundo, cada prompt cuesta 1,49 euros — menos que un cafe. Pagas solo cuando lo necesitas, sin suscripcion ni compromiso." } }
+    { "@type": "Question", "name": "Como funciona el precio por prompt?", "acceptedAnswer": { "@type": "Answer", "text": "El primer prompt es gratis para que compruebes el valor antes de pagar. A partir del segundo, cada prompt cuesta 1,99 euros — menos que un cafe. Pagas solo cuando lo necesitas, sin suscripcion ni compromiso." } }
   ]
 };
 
@@ -262,9 +262,9 @@ export default function Home() {
     { q: "Como hacer un buen prompt para ChatGPT?", a: "Un buen prompt para ChatGPT necesita cuatro elementos: un rol de experto especifico, tu situacion concreta con todos los detalles relevantes, el objetivo preciso que quieres conseguir, y las instrucciones sobre el formato de respuesta. promptbien.com construye todo esto automaticamente en 30 segundos." },
     { q: "Por que ChatGPT me da respuestas genericas?", a: "Las IAs responden en funcion de como les preguntas. Sin contexto especifico, la IA asume que debe dar una respuesta valida para cualquier persona, lo que resulta en respuestas de blog. Con un prompt que incluye tu situacion concreta, un rol de experto y un objetivo claro, la IA puede darte una respuesta de nivel profesional personalizada." },
     { q: "Funciona para viajes, salud e inmobiliario?", a: "Si. promptbien tiene prompts especialmente optimizados para planificar viajes con ChatGPT, preparar consultas medicas, y tomar decisiones inmobiliarias. Tambien funciona para cualquier otro tema con la opcion de consulta libre." },
-    { q: "Es gratis el generador de prompts?", a: "Tu primer prompt es completamente gratuito, sin registro. A partir del segundo, cada prompt tiene un coste de 1,49 euros de pago puntual. Sin suscripcion, sin compromiso, sin cuenta necesaria." },
+    { q: "Es gratis el generador de prompts?", a: "Tu primer prompt es completamente gratuito, sin registro. A partir del segundo, cada prompt tiene un coste de 1,99 euros de pago puntual. Sin suscripcion, sin compromiso, sin cuenta necesaria." },
     { q: "Funciona con Claude y Gemini ademas de ChatGPT?", a: "Si. Al iniciar el proceso seleccionas la IA que usaras y el prompt se adapta especificamente para ella. ChatGPT, Claude y Gemini tienen caracteristicas distintas y los prompts generados estan optimizados para cada una." },
-    { q: "Como funciona el precio por prompt?", a: "El primer prompt es gratis para que compruebes el valor antes de pagar. A partir del segundo, cada prompt cuesta 1,49 euros — menos que un cafe. Pagas solo cuando lo necesitas, sin suscripcion ni compromiso." },
+    { q: "Como funciona el precio por prompt?", a: "El primer prompt es gratis para que compruebes el valor antes de pagar. A partir del segundo, cada prompt cuesta 1,99 euros — menos que un cafe. Pagas solo cuando lo necesitas, sin suscripcion ni compromiso." },
   ];
 
   return (
@@ -489,7 +489,7 @@ export default function Home() {
           <article className="price-card feat reveal" style={{ transitionDelay: ".1s" }}>
             <div className="feat-badge">⚡ Menos que un café</div>
             <div className="price-plan">Prompts adicionales</div>
-            <div className="price-amt">1,49€</div>
+            <div className="price-amt">1,99€</div>
             <div className="price-per">por prompt · pago puntual · sin suscripción</div>
             <ul className="price-feats">
               <li>Paga solo cuando lo necesitas</li>
@@ -523,7 +523,7 @@ export default function Home() {
         <h2>Tu prompt perfecto te espera</h2>
         <p className="lead">Empieza gratis ahora. Sin registro. Sin tarjeta. En 30 segundos tienes tu prompt listo para copiar en ChatGPT, Claude o Gemini.</p>
         <a href="/generar" className="btn-cta-white">✨ Generar mi prompt gratis</a>
-        <p className="cta-note">Primer prompt gratis · 1,49€ por prompt · Sin suscripción</p>
+        <p className="cta-note">Primer prompt gratis · 1,99€ por prompt · Sin suscripción</p>
       </section>
 
       <footer>
