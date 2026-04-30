@@ -238,9 +238,12 @@ export default function Generar() {
         <a href="/" className="nav-logo">prompt<span>bien</span></a>
         <div className="nav-right">
           {session && (
-            <span className="nav-user">
-              {isFreePromptAvailable ? "✨ 1 prompt gratis" : credits > 0 ? `⚡ ${credits} prompt${credits > 1 ? "s" : ""}` : session.user.email?.split("@")[0]}
-            </span>
+            <>
+              <a href="/mis-prompts" className="nav-back">Mis prompts</a>
+              <span className="nav-user">
+                {isFreePromptAvailable ? "✨ 1 prompt gratis" : credits > 0 ? `⚡ ${credits} prompt${credits > 1 ? "s" : ""}` : session.user.email?.split("@")[0]}
+              </span>
+            </>
           )}
           <a href="/" className="nav-back">← Inicio</a>
         </div>
