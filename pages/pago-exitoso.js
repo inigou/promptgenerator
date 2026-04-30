@@ -61,6 +61,18 @@ export default function PagoExitoso() {
 
   useEffect(() => {
     setTimeout(() => setReady(true), 100);
+    // Evento de conversión en Google Analytics
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "purchase", {
+        currency: "EUR",
+        value: 1.99,
+        items: [{
+          item_name: "Prompt adicional",
+          price: 1.99,
+          quantity: 1,
+        }]
+      });
+    }
   }, []);
 
   return (
@@ -87,7 +99,7 @@ export default function PagoExitoso() {
           <div className="coffee">☕ Has invertido menos que un café</div>
 
           <div className="features">
-            <div className="feature">
+            <div classNaƒme="feature">
               <span className="check">✓</span>
               <span className="feature-icon">⚡</span>
               <span>1 crédito añadido a tu cuenta</span>
