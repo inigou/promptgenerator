@@ -229,6 +229,7 @@ export default function Generar() {
     <>
       <Head>
         <title>Generador de Prompts | promptbien.com</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="description" content="Genera el prompt perfecto para ChatGPT, Claude o Gemini en 30 segundos. Gratis." />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
