@@ -22,9 +22,9 @@ const schemaFAQ = {
     { "@type": "Question", "name": "Como hacer un buen prompt para ChatGPT?", "acceptedAnswer": { "@type": "Answer", "text": "Un buen prompt para ChatGPT necesita cuatro elementos: un rol de experto especifico, tu situacion concreta con todos los detalles relevantes, el objetivo preciso que quieres conseguir, y las instrucciones sobre el formato de respuesta. promptbien.com construye todo esto automaticamente en 30 segundos." } },
     { "@type": "Question", "name": "Para que sirve un prompt bien escrito?", "acceptedAnswer": { "@type": "Answer", "text": "Un prompt bien escrito transforma la respuesta de la IA de un texto generico de blog a una consulta personalizada de experto. La misma IA da respuestas radicalmente distintas dependiendo de como le preguntas." } },
     { "@type": "Question", "name": "Funciona para viajes, salud e inmobiliario?", "acceptedAnswer": { "@type": "Answer", "text": "Si. promptbien tiene prompts especialmente optimizados para planificar viajes con ChatGPT, preparar consultas medicas, y tomar decisiones inmobiliarias. Tambien funciona para cualquier otro tema con la opcion de consulta libre." } },
-    { "@type": "Question", "name": "Es gratis el generador de prompts?", "acceptedAnswer": { "@type": "Answer", "text": "Si, los primeros 3 prompts al dia son completamente gratuitos. El pack ilimitado tiene un coste de 4,99 euros de pago unico, sin suscripcion mensual ni compromiso." } },
+    { "@type": "Question", "name": "Es gratis el generador de prompts?", "acceptedAnswer": { "@type": "Answer", "text": "Tu primer prompt es completamente gratuito, sin registro. A partir del segundo, cada prompt tiene un coste de 1,49 euros de pago puntual. Sin suscripcion, sin compromiso, sin cuenta necesaria." } },
     { "@type": "Question", "name": "Funciona con Claude y Gemini ademas de ChatGPT?", "acceptedAnswer": { "@type": "Answer", "text": "Si. Al iniciar el proceso seleccionas la IA que usaras y el prompt se adapta especificamente para ella. ChatGPT, Claude y Gemini tienen caracteristicas distintas y los prompts generados estan optimizados para cada una." } },
-    { "@type": "Question", "name": "Que diferencia hay entre el plan gratuito y el pack de 4,99 euros?", "acceptedAnswer": { "@type": "Answer", "text": "El plan gratuito permite 3 prompts al dia. El pack de 4,99 euros es un pago unico que desbloquea prompts ilimitados con contexto mas enriquecido. Sin suscripcion, sin renovacion automatica." } }
+    { "@type": "Question", "name": "Como funciona el precio por prompt?", "acceptedAnswer": { "@type": "Answer", "text": "El primer prompt es gratis para que compruebes el valor antes de pagar. A partir del segundo, cada prompt cuesta 1,49 euros — menos que un cafe. Pagas solo cuando lo necesitas, sin suscripcion ni compromiso." } }
   ]
 };
 
@@ -262,9 +262,9 @@ export default function Home() {
     { q: "Como hacer un buen prompt para ChatGPT?", a: "Un buen prompt para ChatGPT necesita cuatro elementos: un rol de experto especifico, tu situacion concreta con todos los detalles relevantes, el objetivo preciso que quieres conseguir, y las instrucciones sobre el formato de respuesta. promptbien.com construye todo esto automaticamente en 30 segundos." },
     { q: "Por que ChatGPT me da respuestas genericas?", a: "Las IAs responden en funcion de como les preguntas. Sin contexto especifico, la IA asume que debe dar una respuesta valida para cualquier persona, lo que resulta en respuestas de blog. Con un prompt que incluye tu situacion concreta, un rol de experto y un objetivo claro, la IA puede darte una respuesta de nivel profesional personalizada." },
     { q: "Funciona para viajes, salud e inmobiliario?", a: "Si. promptbien tiene prompts especialmente optimizados para planificar viajes con ChatGPT, preparar consultas medicas, y tomar decisiones inmobiliarias. Tambien funciona para cualquier otro tema con la opcion de consulta libre." },
-    { q: "Es gratis el generador de prompts?", a: "Si, los primeros 3 prompts al dia son completamente gratuitos. El pack ilimitado tiene un coste de 4,99 euros de pago unico, sin suscripcion mensual ni compromiso." },
+    { q: "Es gratis el generador de prompts?", a: "Tu primer prompt es completamente gratuito, sin registro. A partir del segundo, cada prompt tiene un coste de 1,49 euros de pago puntual. Sin suscripcion, sin compromiso, sin cuenta necesaria." },
     { q: "Funciona con Claude y Gemini ademas de ChatGPT?", a: "Si. Al iniciar el proceso seleccionas la IA que usaras y el prompt se adapta especificamente para ella. ChatGPT, Claude y Gemini tienen caracteristicas distintas y los prompts generados estan optimizados para cada una." },
-    { q: "Que diferencia hay entre el plan gratuito y el pack de 4,99 euros?", a: "El plan gratuito permite 3 prompts al dia. El pack de 4,99 euros es un pago unico que desbloquea prompts ilimitados con contexto mas enriquecido. Sin suscripcion, sin renovacion automatica." },
+    { q: "Como funciona el precio por prompt?", a: "El primer prompt es gratis para que compruebes el valor antes de pagar. A partir del segundo, cada prompt cuesta 1,49 euros — menos que un cafe. Pagas solo cuando lo necesitas, sin suscripcion ni compromiso." },
   ];
 
   return (
@@ -274,7 +274,7 @@ export default function Home() {
         <meta name="description" content="Genera el prompt perfecto para ChatGPT, Claude o Gemini en 30 segundos. Obtén respuestas de experto en viajes, salud, inmobiliario y cualquier tema. Gratis. Sin registro." />
         <meta name="keywords" content="generador de prompts, generador de prompts chatgpt, cómo hacer un buen prompt chatgpt, cómo preguntarle bien a la ia, prompt para planificar viaje chatgpt, prompt para consulta medica ia, prompt inmobiliario chatgpt, prompt generator español, hacer prompts ia, mejorar prompts chatgpt" />
         <link rel="canonical" href="https://www.promptbien.com/" />
-        <meta name="google-site-verification" content="a-ly1uQV2JXmrIZA3BQem5WOzGqbb2OylFKgyzt5aKc" />
+        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.promptbien.com/" />
@@ -473,34 +473,34 @@ export default function Home() {
 
       <section className="pricing-sec" id="precios" aria-labelledby="price-title">
         <div className="eyebrow ctr">Precios</div>
-        <h2 className="ctr" id="price-title">Sin suscripciones. Sin sorpresas.</h2>
-        <p className="lead ctr">Prueba gratis hoy. Paga solo si lo usas mucho. Sin tarjeta. Sin compromiso.</p>
+        <h2 className="ctr" id="price-title">Prueba gratis. Paga solo lo que uses.</h2>
+        <p className="lead ctr">Sin suscripción. Sin compromiso. Tu primer prompt es gratis para que veas el valor antes de pagar.</p>
         <div className="price-grid">
           <article className="price-card reveal">
-            <div className="price-plan">Gratis</div>
+            <div className="price-plan">Primer prompt</div>
             <div className="price-amt">0€</div>
-            <div className="price-per">para siempre · sin tarjeta</div>
+            <div className="price-per">gratis · sin registro · sin tarjeta</div>
             <ul className="price-feats">
-              <li>3 prompts personalizados al día</li>
+              <li>1 prompt personalizado gratis</li>
               <li>Todos los temas disponibles</li>
               <li>ChatGPT, Claude y Gemini</li>
               <li>Sin registro necesario</li>
             </ul>
-            <a href="/generar" className="price-btn price-btn-free" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>Empezar gratis</a>
+            <a href="/generar" className="price-btn price-btn-free" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>Generar mi primer prompt</a>
           </article>
           <article className="price-card feat reveal" style={{ transitionDelay: ".1s" }}>
-            <div className="feat-badge">⚡ Más popular</div>
-            <div className="price-plan">Pack ilimitado</div>
-            <div className="price-amt">4,99€</div>
-            <div className="price-per">pago único · sin suscripción</div>
+            <div className="feat-badge">⚡ Menos que un café</div>
+            <div className="price-plan">Prompts adicionales</div>
+            <div className="price-amt">1,49€</div>
+            <div className="price-per">por prompt · pago puntual · sin suscripción</div>
             <ul className="price-feats">
-              <li>Prompts ilimitados</li>
+              <li>Paga solo cuando lo necesitas</li>
               <li>Todos los temas disponibles</li>
               <li>Prompts con contexto enriquecido</li>
-              <li>Sin registro necesario</li>
+              <li>Login con Google en un clic</li>
               <li>Soporte por email</li>
             </ul>
-            <button className="price-btn price-btn-paid">Conseguir acceso ilimitado</button>
+            <a href="/generar" className="price-btn price-btn-paid" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>Empezar ahora</a>
           </article>
         </div>
       </section>
@@ -525,7 +525,7 @@ export default function Home() {
         <h2>Tu prompt perfecto te espera</h2>
         <p className="lead">Empieza gratis ahora. Sin registro. Sin tarjeta. En 30 segundos tienes tu prompt listo para copiar en ChatGPT, Claude o Gemini.</p>
         <a href="/generar" className="btn-cta-white">✨ Generar mi prompt gratis</a>
-        <p className="cta-note">3 prompts gratis al día · Pack ilimitado por 4,99€ · Sin suscripción</p>
+        <p className="cta-note">Primer prompt gratis · 1,49€ por prompt · Sin suscripción</p>
       </section>
 
       <footer>
