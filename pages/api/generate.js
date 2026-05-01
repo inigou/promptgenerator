@@ -65,13 +65,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Faltan datos" });
   }
 
-  // Siempre requiere sesión
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
     return res.status(401).json({ error: "login_required" });
   }
 
-  // Obtiene datos del usuario en Supabase
   const { data: userData, error: dbError } = await supabase
     .from("users")
     .select("prompts_used, prompts_paid")
@@ -84,30 +82,27 @@ export default async function handler(req, res) {
 
   const { prompts_used, prompts_paid } = userData;
 
-  // Primer prompt: gratis (prompts_used === 0)
   if (prompts_used === 0) {
     await supabase
       .from("users")
       .update({ prompts_used: 1 })
       .eq("email", session.user.email);
-    return await generatePrompt(res, ia, tema, situacion, objetivo);
+    return await generateAndSave(req, res, session.user.email, ia, tema, situacion, objetivo);
   }
 
-  // Prompts adicionales: necesita créditos
   const creditsAvailable = prompts_paid - (prompts_used - 1);
   if (creditsAvailable <= 0) {
     return res.status(402).json({ error: "payment_required" });
   }
 
-  // Actualiza primero, genera después
   await supabase
     .from("users")
     .update({ prompts_used: prompts_used + 1 })
     .eq("email", session.user.email);
-  return await generatePrompt(res, ia, tema, situacion, objetivo);
+  return await generateAndSave(req, res, session.user.email, ia, tema, situacion, objetivo);
 }
 
-async function generatePrompt(res, ia, tema, situacion, objetivo) {
+async function generateAndSave(req, res, email, ia, tema, situacion, objetivo) {
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -136,6 +131,16 @@ async function generatePrompt(res, ia, tema, situacion, objetivo) {
     }
 
     const text = data.content?.[0]?.text || "";
+
+    // Guarda en historial
+    await supabase.from("prompts_history").insert({
+      user_email: email,
+      tema,
+      ia,
+      situacion,
+      resultado: text,
+    });
+
     return res.status(200).json({ prompt: text });
   } catch (error) {
     return res.status(500).json({ error: "Error generando el prompt" });
