@@ -43,35 +43,59 @@ export default async function handler(req, res) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const email = session.customer_details?.email;
+    const metadata = session.metadata || {};
 
     if (!email) {
-      console.error("No email in session");
       return res.status(400).json({ error: "No email found" });
     }
 
-    // Busca el usuario en Supabase
-    const { data: userData, error } = await supabase
-      .from("users")
-      .select("prompts_paid")
-      .eq("email", email)
-      .single();
+    // PAGO DE CATÁLOGO
+    if (metadata.type === "catalog" && metadata.prompt_slug) {
+      const slug = metadata.prompt_slug;
 
-    if (error || !userData) {
-      // Si no existe, lo crea con 1 crédito
-      await supabase.from("users").insert({
-        email,
-        prompts_used: 1,
-        prompts_paid: 1,
-      });
-    } else {
-      // Si existe, añade 1 crédito
-      await supabase
+      // Añade el slug al array de catalog_prompts_paid del usuario
+      const { data: userData } = await supabase
         .from("users")
-        .update({ prompts_paid: userData.prompts_paid + 1 })
-        .eq("email", email);
-    }
+        .select("catalog_prompts_paid")
+        .eq("email", email)
+        .single();
 
-    console.log(`Crédito añadido para ${email}`);
+      const currentPaid = userData?.catalog_prompts_paid || [];
+      if (!currentPaid.includes(slug)) {
+        await supabase
+          .from("users")
+          .update({ catalog_prompts_paid: [...currentPaid, slug] })
+          .eq("email", email);
+      }
+
+      // Incrementa uses_count
+      await supabase.rpc("increment_uses_count", { prompt_slug: slug });
+
+      console.log(`Catálogo: ${slug} comprado por ${email}`);
+    }
+    // PAGO DEL GENERADOR (lógica existente)
+    else {
+      const { data: userData } = await supabase
+        .from("users")
+        .select("prompts_paid")
+        .eq("email", email)
+        .single();
+
+      if (!userData) {
+        await supabase.from("users").insert({
+          email,
+          prompts_used: 1,
+          prompts_paid: 1,
+        });
+      } else {
+        await supabase
+          .from("users")
+          .update({ prompts_paid: userData.prompts_paid + 1 })
+          .eq("email", email);
+      }
+
+      console.log(`Generador: crédito añadido para ${email}`);
+    }
   }
 
   return res.status(200).json({ received: true });
