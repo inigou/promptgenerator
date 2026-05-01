@@ -284,12 +284,12 @@ export default function Home() {
   ];
 
   const catalogItems = [
+    { badge: "✈️ Viajes", bg: "rgba(255,107,74,.2)", color: "#FF6B4A", title: "Itinerario a medida para Japón", desc: "10-14 días, cultura y gastronomía sin multitudes" },
     { badge: "🩺 Salud", bg: "rgba(48,209,88,.2)", color: "#30D158", title: "Entender tu analítica de sangre", desc: "Qué significan tus valores y qué preguntar al médico" },
-    { badge: "🩺 Salud", bg: "rgba(48,209,88,.2)", color: "#30D158", title: "Preparar tu consulta con el especialista", desc: "Las preguntas exactas que tu médico necesita escuchar" },
-    { badge: "🩺 Salud", bg: "rgba(48,209,88,.2)", color: "#30D158", title: "Gestionar el estrés y el insomnio", desc: "Técnicas reales con evidencia científica para dormir mejor" },
-    { badge: "🩺 Salud", bg: "rgba(48,209,88,.2)", color: "#30D158", title: "Plan para bajar de peso después de los 45", desc: "Estrategia personalizada para tu metabolismo actual" },
-    { badge: "🩺 Salud", bg: "rgba(48,209,88,.2)", color: "#30D158", title: "Entender los cambios hormonales", desc: "Menopausia o andropausia: qué esperar y qué hacer" },
-    { badge: "🩺 Salud", bg: "rgba(48,209,88,.2)", color: "#30D158", title: "Entender tu dolor de espalda", desc: "Descifra qué puede estar pasando realmente" },
+    { badge: "🏠 Inmobiliario", bg: "rgba(255,159,10,.2)", color: "#FF9F0A", title: "¿Amortizar hipoteca o invertir ese dinero?", desc: "El dilema financiero que más preocupa a propietarios de 40-55 años" },
+    { badge: "💼 Trabajo", bg: "rgba(91,75,245,.2)", color: "#5B4BF5", title: "Negociar un aumento de sueldo", desc: "Argumentos, estrategia y cómo tener la conversación difícil" },
+    { badge: "💰 Finanzas", bg: "rgba(191,90,242,.2)", color: "#BF5AF2", title: "Cómo empezar a invertir desde cero", desc: "Fondos indexados, ETFs o depósitos: qué elegir según tu perfil" },
+    { badge: "✈️ Viajes", bg: "rgba(255,107,74,.2)", color: "#FF6B4A", title: "Viaje diseñado alrededor de la gastronomía", desc: "Comer bien como eje del viaje, no como extra" },
   ];
 
   return (
@@ -406,6 +406,26 @@ export default function Home() {
         </div>
       </section>
 
+      {/* CATALOG SECTION */}
+      <section className="catalog-sec" id="catalogo" aria-labelledby="catalog-title">
+        <div className="eyebrow">Catálogo de prompts</div>
+        <h2 id="catalog-title">El prompt exacto para tu caso concreto</h2>
+        <p className="lead">No hace falta describir tu situación desde cero. Elige un caso ya resuelto, personaliza 3 campos y tenlo listo en 30 segundos.</p>
+        <div className="catalog-grid">
+          {catalogItems.map((c, i) => (
+            <a key={i} href="/catalogo" className="catalog-card reveal" style={{ transitionDelay: `${i * 0.08}s` }}>
+              <span className="catalog-card-badge" style={{ background: c.bg, color: c.color }}>{c.badge}</span>
+              <h3>{c.title}</h3>
+              <p>{c.desc}</p>
+              <span className="catalog-card-price">1,99€ · pago único</span>
+            </a>
+          ))}
+        </div>
+        <div className="catalog-cta">
+          <a href="/catalogo" className="btn-catalog">Ver todos los prompts del catálogo →</a>
+        </div>
+      </section>
+
       {/* VERTICALS */}
       <section className="vert-sec" id="para-que-sirve" aria-labelledby="vert-title">
         <div className="eyebrow">Para qué sirve</div>
@@ -477,26 +497,6 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* CATALOG SECTION */}
-      <section className="catalog-sec" id="catalogo" aria-labelledby="catalog-title">
-        <div className="eyebrow">Nuevo — Catálogo de prompts</div>
-        <h2 id="catalog-title">El prompt exacto para tu caso concreto</h2>
-        <p className="lead">No hace falta describir tu situación desde cero. Elige un caso ya resuelto, personaliza 3 campos y tenlo listo en 30 segundos.</p>
-        <div className="catalog-grid">
-          {catalogItems.map((c, i) => (
-            <a key={i} href="/catalogo" className="catalog-card reveal" style={{ transitionDelay: `${i * 0.08}s` }}>
-              <span className="catalog-card-badge" style={{ background: c.bg, color: c.color }}>{c.badge}</span>
-              <h3>{c.title}</h3>
-              <p>{c.desc}</p>
-              <span className="catalog-card-price">1,99€ · pago único</span>
-            </a>
-          ))}
-        </div>
-        <div className="catalog-cta">
-          <a href="/catalogo" className="btn-catalog">Ver todos los prompts del catálogo →</a>
         </div>
       </section>
 
