@@ -8,25 +8,41 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
     return res.status(401).json({ error: "login_required" });
   }
 
-  const { data, error } = await supabase
-    .from("prompts_history")
-    .select("id, tema, ia, situacion, resultado, created_at")
-    .eq("user_email", session.user.email)
-    .order("created_at", { ascending: false })
-    .limit(20);
+  // GET — cargar historial
+  if (req.method === "GET") {
+    const { data, error } = await supabase
+      .from("prompts_history")
+      .select("id, tema, ia, situacion, resultado, created_at")
+      .eq("user_email", session.user.email)
+      .order("created_at", { ascending: false })
+      .limit(20);
 
-  if (error) {
-    return res.status(500).json({ error: "Error cargando historial" });
+    if (error) {
+      return res.status(500).json({ error: "Error cargando historial" });
+    }
+    return res.status(200).json({ history: data || [] });
   }
 
-  return res.status(200).json({ history: data || [] });
+  // POST — guardar prompt de catálogo
+  if (req.method === "POST") {
+    const { tema, ia, situacion, resultado } = req.body;
+    const { error } = await supabase.from("prompts_history").insert({
+      user_email: session.user.email,
+      tema,
+      ia,
+      situacion,
+      resultado,
+    });
+    if (error) {
+      return res.status(500).json({ error: "Error guardando en historial" });
+    }
+    return res.status(200).json({ ok: true });
+  }
+
+  return res.status(405).json({ error: "Method not allowed" });
 }

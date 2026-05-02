@@ -116,6 +116,18 @@ export default function PagoExitoso() {
         const fieldValues = fieldsParam ? JSON.parse(decodeURIComponent(fieldsParam)) : {};
         const built = buildPrompt(data.prompt.prompt_body, data.prompt.fields, fieldValues);
         setBuiltPrompt(built);
+
+        // Guardar en historial
+        await fetch("/api/prompts-history", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tema: data.prompt.category,
+            ia: "Catálogo",
+            situacion: data.prompt.title,
+            resultado: built,
+          }),
+        });
       }
     } catch (e) {
       console.error(e);
@@ -158,7 +170,8 @@ export default function PagoExitoso() {
               <button className={`btn-main ${copied ? "copied" : ""}`} onClick={copyPrompt}>
                 {copied ? "✓ ¡Copiado!" : "Copiar prompt"}
               </button>
-              <a href="/catalogo" className="btn-outline">Ver más prompts del catálogo</a>
+              <a href="/mis-prompts" className="btn-outline">📋 Ver mis prompts guardados</a>
+              <a href="/catalogo" className="btn-outline" style={{ marginTop: 8 }}>Ver más prompts del catálogo</a>
             </>
           ) : (
             <>
