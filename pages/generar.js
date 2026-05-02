@@ -203,9 +203,15 @@ export default function Generar() {
       if (res.status === 401) { setWall("login"); setLoading(false); return; }
       if (res.status === 402) { setWall("payment"); setLoading(false); return; }
       if (!res.ok) throw new Error(data.error || "Error generando el prompt");
-
       setResultado(data.prompt);
-      setStep(4);
+        if (typeof window !== "undefined" && window.gtag) {
+            window.gtag('event', 'generate_prompt', {
+                tema: tema,
+                ia_destino: ia,
+            });
+        }  
+        setStep(4);
+      
     } catch (e) {
       setError(e.message || "Algo fue mal. Intentalo de nuevo.");
     }
