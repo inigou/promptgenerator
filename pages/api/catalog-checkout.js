@@ -19,7 +19,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Falta el slug del prompt" });
   }
 
-  try {
+  const baseUrl = "https://www.promptbien.com";
+
+try {
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -30,14 +32,14 @@ export default async function handler(req, res) {
               name: "Prompt de catálogo promptbien",
               description: `Prompt personalizado: ${slug}`,
             },
-            unit_amount: 199, // 1.99€ en céntimos
+            unit_amount: 199,
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXTAUTH_URL}/pago-exitoso?type=catalog&slug=${slug}&fields=${encodeURIComponent(JSON.stringify(fields || {}))}`,
-      cancel_url: `${process.env.NEXTAUTH_URL}/catalogo`,
+      success_url: `${baseUrl}/pago-exitoso?type=catalog&slug=${slug}&fields=${encodeURIComponent(JSON.stringify(fields || {}))}`,
+      cancel_url: `${baseUrl}/catalogo`,
       customer_email: session.user.email,
       metadata: {
         type: "catalog",
