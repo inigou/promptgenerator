@@ -332,9 +332,19 @@ export default function Home() {
         <h1>Deja de recibir respuestas <em>genéricas</em> de la IA</h1>
         <p className="hero-sub">Describe tu situación en 30 segundos y te generamos el prompt perfecto para obtener respuestas de experto. Sin tecnicismos. Sin complicaciones.</p>
         <div className="hero-ctas">
-          <a href="/generar" className="btn-coral">✨ Generar mi prompt gratis</a>
-          <a href="#como-funciona" className="btn-white-outline">Ver cómo funciona</a>
+            <a href="/generar" className="btn-coral">✨ Generar mi prompt gratis</a>
+            <a href="#como-funciona" className="btn-white-outline">Ver cómo funciona</a>
         </div>
+        <a href="/catalogo" style={{ 
+            color: "rgba(255,255,255,0.55)", 
+            fontSize: ".85rem", 
+            fontWeight: 700, 
+            textDecoration: "none",
+            marginTop: "1rem",
+            display: "block"
+        }}>
+            ✦ Ver catálogo de prompts →
+        </a>
         <div className="hero-demo" role="img" aria-label="Vista previa del generador">
           <div className="demo-bar">
             <div className="demo-dot" style={{ background: "#FF5F57" }} />
