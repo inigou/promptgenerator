@@ -10,6 +10,10 @@ const CATEGORY_CONFIG = {
   inmobiliario: { label: "Inmobiliario", emoji: "🏠", bg: "rgba(255,159,10,0.15)", color: "#FF9F0A" },
   finanzas: { label: "Finanzas", emoji: "💰", bg: "rgba(191,90,242,0.15)", color: "#BF5AF2" },
   trabajo: { label: "Trabajo", emoji: "💼", bg: "rgba(255,107,74,0.15)", color: "#FF6B4A" },
+  familia: { label: "Familia", emoji: "👨‍👩‍👧", bg: "rgba(255,214,10,0.15)", color: "#FFD60A" },
+  legal: { label: "Legal", emoji: "⚖️", bg: "rgba(100,210,255,0.15)", color: "#64D2FF" },
+  bienestar: { label: "Bienestar", emoji: "🌿", bg: "rgba(48,209,88,0.15)", color: "#30D158" },
+  emprender: { label: "Emprender", emoji: "🚀", bg: "rgba(255,107,74,0.15)", color: "#FF6B4A" },
 };
 
 const CSS = `
@@ -52,7 +56,7 @@ const CSS = `
   .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(91,75,245,.12); border-color: #C8C8F5; }
   .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
   .card-badge { font-size: .72rem; font-weight: 800; padding: 4px 12px; border-radius: 100px; text-transform: capitalize; letter-spacing: .03em; }
-  .card-uses { font-size: .75rem; font-weight: 800; color: #5B4BF5; background: #F0EEFF; padding: 3px 10px; border-radius: 100px; }
+  .card-uses { font-size: .75rem; font-weight: 600; color: #8A8AAA; }
   .card h3 { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 900; color: #1A1A2E; margin-bottom: .4rem; line-height: 1.3; letter-spacing: -.01em; }
   .card-subtitle { font-size: .85rem; font-weight: 600; color: #8A8AAA; margin-bottom: 1rem; }
   .card-preview { font-size: .85rem; font-weight: 600; color: #4A4A6A; line-height: 1.6; margin-bottom: 1.25rem; font-style: italic; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
