@@ -118,7 +118,7 @@ export default function Catalogo() {
   const [activeCategory, setActiveCategory] = useState("todos");
   const [selectedPrompt, setSelectedPrompt] = useState(null);
   const [fieldValues, setFieldValues] = useState({});
-  const [paying, setPaying] = useState(false);
+  const [paying, setPaying] = useState(null);
 
   useEffect(() => {
     fetchPrompts();
@@ -144,28 +144,26 @@ export default function Catalogo() {
   function closeModal() {
     setSelectedPrompt(null);
     setFieldValues({});
-    setPaying(false);
+    setPaying(null);
   }
 
-  async function handlePay() {
+  async function handlePay(type = "catalog") {
     if (!session) {
       signIn("google", { callbackUrl: `/catalogo` });
       return;
     }
-    setPaying(true);
+    setPaying(type);
     try {
       const res = await fetch("/api/catalog-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: selectedPrompt.slug, fields: fieldValues }),
+        body: JSON.stringify({ slug: selectedPrompt.slug, fields: fieldValues, type }),
       });
       const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
+      if (data.url) window.location.href = data.url;
     } catch (e) {
       console.error(e);
-      setPaying(false);
+      setPaying(null);
     }
   }
 
@@ -319,15 +317,16 @@ export default function Catalogo() {
 
             <div className="modal-divider" />
             <div className="modal-footer">
-              <div className="modal-price-row">
-                <div>
-                  <div className="modal-price">1,99€</div>
-                  <div className="modal-price-note">pago único · sin suscripción</div>
-                </div>
-              </div>
-              <button className="btn-pay" onClick={handlePay} disabled={paying}>
-                {paying ? "Redirigiendo a Stripe..." : "Obtener este prompt — 1,99€"}
+              <button className="btn-pay" onClick={() => handlePay("catalog")} disabled={paying}>
+                {paying === "catalog" ? "Redirigiendo..." : "🔒 Obtener el prompt — 1,99€"}
               </button>
+              <div className="modal-price-note" style={{ textAlign: "center", margin: "6px 0" }}>Para usar en ChatGPT, Claude o Gemini</div>
+
+              <button className="btn-pay btn-consultation" onClick={() => handlePay("consultation")} disabled={paying} style={{ marginTop: 10, background: "#5B4BF5" }}>
+                {paying === "consultation" ? "Redirigiendo..." : "⚡ Consultar directamente — 4,99€"}
+              </button>
+              <div className="modal-price-note" style={{ textAlign: "center", margin: "6px 0" }}>Recibe la respuesta ahora. Sin salir de aquí.</div>
+
               {!session && (
                 <p className="login-note">
                   Necesitas <button onClick={() => signIn("google")}>entrar con Google</button> para comprar

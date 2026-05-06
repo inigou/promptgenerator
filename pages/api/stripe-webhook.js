@@ -7,9 +7,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
-export const config = {
-  api: { bodyParser: false },
-};
+export const config = { api: { bodyParser: false } };
 
 async function getRawBody(req) {
   return new Promise((resolve, reject) => {
@@ -21,80 +19,76 @@ async function getRawBody(req) {
 }
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  if (req.method !== "POST") return res.status(405).end();
 
   const rawBody = await getRawBody(req);
   const sig = req.headers["stripe-signature"];
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(
-      rawBody,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
+    event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error("Webhook signature error:", err.message);
     return res.status(400).json({ error: `Webhook error: ${err.message}` });
   }
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    const email = session.customer_details?.email;
+    const email = session.customer_details?.email || session.customer_email;
     const metadata = session.metadata || {};
+    const { type, prompt_slug, user_email, fields } = metadata;
+    const userEmail = user_email || email;
 
-    if (!email) {
-      return res.status(400).json({ error: "No email found" });
+    if (!userEmail) return res.status(400).json({ error: "No email found" });
+
+    // CONSULTA DIRECTA
+    if (type === "consultation" && prompt_slug) {
+      await supabase.from("consultations").insert({
+        user_email: userEmail,
+        prompt_slug,
+        fields: fields ? JSON.parse(fields) : {},
+        status: "pending",
+      });
+
+      // Incrementa uses_count
+      await supabase.rpc("increment_uses_count", { prompt_slug });
+
+      console.log(`Consulta: ${prompt_slug} por ${userEmail}`);
     }
-
-    // PAGO DE CATÁLOGO
-    if (metadata.type === "catalog" && metadata.prompt_slug) {
-      const slug = metadata.prompt_slug;
-
-      // Añade el slug al array de catalog_prompts_paid del usuario
+    // PROMPT DE CATÁLOGO
+    else if (type === "catalog" && prompt_slug) {
       const { data: userData } = await supabase
         .from("users")
         .select("catalog_prompts_paid")
-        .eq("email", email)
+        .eq("email", userEmail)
         .single();
 
       const currentPaid = userData?.catalog_prompts_paid || [];
-      if (!currentPaid.includes(slug)) {
+      if (!currentPaid.includes(prompt_slug)) {
         await supabase
           .from("users")
-          .update({ catalog_prompts_paid: [...currentPaid, slug] })
-          .eq("email", email);
+          .update({ catalog_prompts_paid: [...currentPaid, prompt_slug] })
+          .eq("email", userEmail);
       }
 
-      // Incrementa uses_count
-      await supabase.rpc("increment_uses_count", { prompt_slug: slug });
+      await supabase.rpc("increment_uses_count", { prompt_slug });
 
-      console.log(`Catálogo: ${slug} comprado por ${email}`);
+      console.log(`Catálogo: ${prompt_slug} por ${userEmail}`);
     }
-    // PAGO DEL GENERADOR (lógica existente)
+    // GENERADOR (crédito adicional)
     else {
       const { data: userData } = await supabase
         .from("users")
         .select("prompts_paid")
-        .eq("email", email)
+        .eq("email", userEmail)
         .single();
 
       if (!userData) {
-        await supabase.from("users").insert({
-          email,
-          prompts_used: 1,
-          prompts_paid: 1,
-        });
+        await supabase.from("users").insert({ email: userEmail, prompts_used: 1, prompts_paid: 1 });
       } else {
-        await supabase
-          .from("users")
-          .update({ prompts_paid: userData.prompts_paid + 1 })
-          .eq("email", email);
+        await supabase.from("users").update({ prompts_paid: userData.prompts_paid + 1 }).eq("email", userEmail);
       }
 
-      console.log(`Generador: crédito añadido para ${email}`);
+      console.log(`Generador: crédito para ${userEmail}`);
     }
   }
 

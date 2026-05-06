@@ -2,12 +2,6 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
 
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
@@ -87,25 +81,35 @@ export default function PagoExitoso() {
   const [copied, setCopied] = useState(false);
   const [catalogPrompt, setCatalogPrompt] = useState(null);
   const [builtPrompt, setBuiltPrompt] = useState(null);
-  const isCatalog = router.query.type === "catalog";
+  const [consultationResponse, setConsultationResponse] = useState(null);
+  const [consultationLoading, setConsultationLoading] = useState(false);
+  const [copiedConsultation, setCopiedConsultation] = useState(false);
+
+  const type = router.query.type;
+  const isCatalog = type === "catalog";
+  const isConsultation = type === "consultation";
 
   useEffect(() => {
+    if (!router.isReady) return;
     setTimeout(() => setReady(true), 100);
 
-    // Evento GA4
+    const value = isConsultation ? 3.99 : 1.99;
+    const itemName = isConsultation ? "Consulta directa" : isCatalog ? "Prompt catálogo" : "Prompt adicional";
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "purchase", {
-        currency: "EUR",
-        value: 1.99,
-        items: [{ item_name: isCatalog ? "Prompt catálogo" : "Prompt adicional", price: 1.99, quantity: 1 }]
+        currency: "EUR", value,
+        items: [{ item_name: itemName, price: value, quantity: 1 }]
       });
     }
 
-    // Si es catálogo, carga el prompt y construye el resultado
-    if (router.query.slug) {
+    if (isCatalog && router.query.slug) {
       loadCatalogPrompt(router.query.slug, router.query.fields);
     }
-  }, [router.query]);
+
+    if (isConsultation && router.query.slug) {
+      loadConsultation(router.query.slug, router.query.fields);
+    }
+  }, [router.isReady, router.query]);
 
   async function loadCatalogPrompt(slug, fieldsParam) {
     try {
@@ -114,31 +118,52 @@ export default function PagoExitoso() {
       if (data.prompt) {
         setCatalogPrompt(data.prompt);
         const fieldValues = fieldsParam ? JSON.parse(decodeURIComponent(fieldsParam)) : {};
-        const built = buildPrompt(data.prompt.prompt_body, data.prompt.fields, fieldValues);
+        const fields = typeof data.prompt.fields === "string" ? JSON.parse(data.prompt.fields) : data.prompt.fields;
+        const built = buildPrompt(data.prompt.prompt_body, fields, fieldValues);
         setBuiltPrompt(built);
+        await fetch("/api/prompts-history", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tema: data.prompt.category, ia: "Catálogo", situacion: data.prompt.title, resultado: built }),
+        });
+      }
+    } catch (e) { console.error(e); }
+  }
 
+  async function loadConsultation(slug, fieldsParam) {
+    setConsultationLoading(true);
+    try {
+      // Buscar la consulta pending en Supabase via API
+      const fields = fieldsParam ? JSON.parse(decodeURIComponent(fieldsParam)) : {};
+      const res = await fetch("/api/consulta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug, fields }),
+      });
+      const data = await res.json();
+      if (data.response) {
+        setConsultationResponse(data.response);
         // Guardar en historial
         await fetch("/api/prompts-history", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            tema: data.prompt.category,
-            ia: "Catálogo",
-            situacion: data.prompt.title,
-            resultado: built,
-          }),
+          body: JSON.stringify({ tema: slug.split("-")[0], ia: "Consulta Directa", situacion: slug, resultado: data.response }),
         });
       }
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) { console.error(e); }
+    setConsultationLoading(false);
   }
 
   function copyPrompt() {
-    const text = builtPrompt || "";
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(builtPrompt || "");
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
+  }
+
+  function copyConsultation() {
+    navigator.clipboard.writeText(consultationResponse || "");
+    setCopiedConsultation(true);
+    setTimeout(() => setCopiedConsultation(false), 2500);
   }
 
   return (
@@ -157,12 +182,49 @@ export default function PagoExitoso() {
 
       <div className="wrap">
         <div className="card">
-          <span className="emoji">🎉</span>
+          <span className="emoji">{isConsultation ? "⚡" : "🎉"}</span>
 
-          {isCatalog && catalogPrompt ? (
+          {/* CONSULTA DIRECTA */}
+          {isConsultation && (
+            <>
+              {consultationLoading ? (
+                <>
+                  <h1>Consultando con el experto...</h1>
+                  <p className="sub">Tu consulta está siendo procesada. En unos segundos tendrás la respuesta.</p>
+                  <div style={{ width: 40, height: 40, border: "4px solid rgba(255,255,255,.15)", borderTopColor: "white", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "1.5rem auto" }} />
+                </>
+              ) : consultationResponse ? (
+                <>
+                  <h1>Tu consulta con el experto</h1>
+                  <p className="sub">Respuesta generada específicamente para tu situación.</p>
+                  <div className="prompt-result">
+                    <div className="prompt-result-label">Respuesta del experto</div>
+                    <div className="prompt-result-text">{consultationResponse}</div>
+                  </div>
+                  <button className={`btn-main ${copiedConsultation ? "copied" : ""}`} onClick={copyConsultation}>
+                    {copiedConsultation ? "✓ ¡Copiado!" : "Copiar respuesta"}
+                  </button>
+                  <a href="/mis-prompts" className="btn-outline">📋 Ver mis consultas guardadas</a>
+                  <a href="/catalogo" className="btn-outline" style={{ marginTop: 8 }}>Hacer otra consulta</a>
+                  <p style={{ fontSize: ".75rem", color: "rgba(255,255,255,.3)", marginTop: "1rem" }}>
+                    Generado por IA · No sustituye asesoramiento profesional
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h1>Algo fue mal</h1>
+                  <p className="sub">No pudimos procesar tu consulta. Escríbenos y lo resolvemos.</p>
+                  <a href="/catalogo" className="btn-main">Volver al catálogo</a>
+                </>
+              )}
+            </>
+          )}
+
+          {/* PROMPT CATÁLOGO */}
+          {isCatalog && catalogPrompt && (
             <>
               <h1>Tu prompt está listo</h1>
-              <p className="sub">Aquí tienes tu prompt personalizado, listo para copiar en ChatGPT, Claude o Gemini.</p>
+              <p className="sub">Cópialo y pégalo en ChatGPT, Claude o Gemini.</p>
               <div className="prompt-result">
                 <div className="prompt-result-label">Tu prompt personalizado</div>
                 <div className="prompt-result-text">{builtPrompt}</div>
@@ -173,10 +235,13 @@ export default function PagoExitoso() {
               <a href="/mis-prompts" className="btn-outline">📋 Ver mis prompts guardados</a>
               <a href="/catalogo" className="btn-outline" style={{ marginTop: 8 }}>Ver más prompts del catálogo</a>
             </>
-          ) : (
+          )}
+
+          {/* GENERADOR */}
+          {!isCatalog && !isConsultation && (
             <>
               <h1>¡Tu prompt está listo para generarse!</h1>
-              <p className="sub">Hemos recibido tu pago correctamente. Ya tienes un crédito disponible para generar tu próximo prompt personalizado.</p>
+              <p className="sub">Hemos recibido tu pago. Ya tienes un crédito disponible.</p>
               <div className="coffee">☕ Has invertido menos que un café</div>
               <div className="features">
                 <div className="feature"><span className="check">✓</span><span>⚡ 1 crédito añadido a tu cuenta</span></div>
@@ -195,6 +260,7 @@ export default function PagoExitoso() {
           </p>
         </div>
       </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </>
   );
 }
