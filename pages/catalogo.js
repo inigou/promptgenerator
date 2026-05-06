@@ -158,12 +158,16 @@ export default function Catalogo() {
     try {
       const res = await fetch(`/api/catalogo${activeCategory !== "todos" ? `?category=${activeCategory}` : ""}`);
       const data = await res.json();
-      const sorted = (data.prompts || []).sort((a, b) => {
-        const aGeneric = a.slug?.endsWith('-consulta-libre') ? 0 : 1;
-        const bGeneric = b.slug?.endsWith('-consulta-libre') ? 0 : 1;
-        return aGeneric - bGeneric;
-      });
-      setPrompts(sorted);
+      const all = data.prompts || [];
+      // En "todos" ocultamos los genéricos — solo aparecen dentro de su categoría
+      const filtered = activeCategory === "todos"
+        ? all.filter(p => !p.slug?.endsWith('-consulta-libre'))
+        : all.sort((a, b) => {
+            const aG = a.slug?.endsWith('-consulta-libre') ? 0 : 1;
+            const bG = b.slug?.endsWith('-consulta-libre') ? 0 : 1;
+            return aG - bG;
+          });
+      setPrompts(filtered);
     } catch (e) {
       console.error(e);
     }
