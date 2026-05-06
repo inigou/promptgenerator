@@ -82,8 +82,10 @@ export default function PagoExitoso() {
   const [catalogPrompt, setCatalogPrompt] = useState(null);
   const [builtPrompt, setBuiltPrompt] = useState(null);
   const [consultationResponse, setConsultationResponse] = useState(null);
+  const [consultationTitle, setConsultationTitle] = useState("");
   const [consultationLoading, setConsultationLoading] = useState(false);
   const [copiedConsultation, setCopiedConsultation] = useState(false);
+  const [copiedContinuation, setCopiedContinuation] = useState(false);
 
   const type = router.query.type;
   const isCatalog = type === "catalog";
@@ -93,7 +95,7 @@ export default function PagoExitoso() {
     if (!router.isReady) return;
     setTimeout(() => setReady(true), 100);
 
-    const value = isConsultation ? 3.99 : 1.99;
+    const value = isConsultation ? 4.99 : 1.99;
     const itemName = isConsultation ? "Consulta directa" : isCatalog ? "Prompt catálogo" : "Prompt adicional";
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "purchase", {
@@ -133,7 +135,6 @@ export default function PagoExitoso() {
   async function loadConsultation(slug, fieldsParam) {
     setConsultationLoading(true);
     try {
-      // Buscar la consulta pending en Supabase via API
       const fields = fieldsParam ? JSON.parse(decodeURIComponent(fieldsParam)) : {};
       const res = await fetch("/api/consulta", {
         method: "POST",
@@ -143,7 +144,7 @@ export default function PagoExitoso() {
       const data = await res.json();
       if (data.response) {
         setConsultationResponse(data.response);
-        // Guardar en historial
+        setConsultationTitle(data.title || "");
         await fetch("/api/prompts-history", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -152,6 +153,16 @@ export default function PagoExitoso() {
       }
     } catch (e) { console.error(e); }
     setConsultationLoading(false);
+  }
+
+  function buildContinuationPrompt(title, response) {
+    return `Acabas de actuar como el mejor experto del mundo en este tema y me has dado la siguiente respuesta sobre "${title || "mi consulta"}":
+
+---
+${response}
+---
+
+A partir de aquí quiero seguir esta conversación contigo manteniendo el mismo rol de experto. Mis preguntas de seguimiento son:`;
   }
 
   function copyPrompt() {
@@ -164,6 +175,12 @@ export default function PagoExitoso() {
     navigator.clipboard.writeText(consultationResponse || "");
     setCopiedConsultation(true);
     setTimeout(() => setCopiedConsultation(false), 2500);
+  }
+
+  function copyContinuation() {
+    navigator.clipboard.writeText(buildContinuationPrompt(consultationTitle, consultationResponse));
+    setCopiedContinuation(true);
+    setTimeout(() => setCopiedContinuation(false), 2500);
   }
 
   return (
@@ -196,15 +213,37 @@ export default function PagoExitoso() {
               ) : consultationResponse ? (
                 <>
                   <h1>Tu consulta con el experto</h1>
-                  <p className="sub">Respuesta generada específicamente para tu situación.</p>
+                  <p className="sub">Respuesta generada específicamente para tu situación. Léela aquí — y si quieres profundizar, copia el prompt de seguimiento para continuar en tu IA.</p>
+
+                  {/* BLOQUE 1: Respuesta */}
                   <div className="prompt-result">
                     <div className="prompt-result-label">Respuesta del experto</div>
                     <div className="prompt-result-text">{consultationResponse}</div>
                   </div>
                   <button className={`btn-main ${copiedConsultation ? "copied" : ""}`} onClick={copyConsultation}>
-                    {copiedConsultation ? "✓ ¡Copiado!" : "Copiar respuesta"}
+                    {copiedConsultation ? "✓ ¡Copiada!" : "📋 Copiar respuesta"}
                   </button>
-                  <a href="/mis-prompts" className="btn-outline">📋 Ver mis consultas guardadas</a>
+
+                  {/* BLOQUE 2: Prompt de continuación */}
+                  <div style={{
+                    background: "rgba(255,255,255,.07)", border: "1.5px solid rgba(255,255,255,.12)",
+                    borderRadius: 16, padding: "18px 20px", margin: "16px 0 8px", textAlign: "left"
+                  }}>
+                    <div style={{ fontSize: ".7rem", fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase", color: "rgba(255,255,255,.4)", marginBottom: 8 }}>
+                      ¿Quieres seguir la conversación?
+                    </div>
+                    <p style={{ fontSize: ".88rem", fontWeight: 600, color: "rgba(255,255,255,.7)", lineHeight: 1.6, marginBottom: 12 }}>
+                      Copia el prompt de continuación y pégalo en ChatGPT, Claude o Gemini. La IA tendrá todo el contexto para seguir donde lo dejamos.
+                    </p>
+                    <button
+                      className={`btn-main ${copiedContinuation ? "copied" : ""}`}
+                      onClick={copyContinuation}
+                      style={{ background: copiedContinuation ? "#30D158" : "rgba(255,255,255,.15)", color: "white", boxShadow: "none" }}
+                    >
+                      {copiedContinuation ? "✓ ¡Copiado!" : "🔗 Copiar prompt de seguimiento"}
+                    </button>
+                  </div>
+
                   <a href="/catalogo" className="btn-outline" style={{ marginTop: 8 }}>Hacer otra consulta</a>
                   <p style={{ fontSize: ".75rem", color: "rgba(255,255,255,.3)", marginTop: "1rem" }}>
                     Generado por IA · No sustituye asesoramiento profesional
