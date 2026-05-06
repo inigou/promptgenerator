@@ -159,7 +159,7 @@ export default function Viajes() {
         <div className="hero-badge">✈️ Prompts para Viajes</div>
         <h1>Deja de recibir itinerarios <em>genéricos</em> de la IA</h1>
         <p className="hero-sub">Genera el prompt perfecto para planificar tu viaje con ChatGPT, Claude o Gemini. Gastronomía local, experiencias auténticas y logística real. En 30 segundos.</p>
-        <a href="/generar" className="btn-coral">✨ Generar mi prompt de viaje gratis</a>
+        <a href="/catalogo?category=viajes" className="btn-coral">Ver prompts de Viajes →</a>
       </header>
 
       <section>
@@ -242,8 +242,9 @@ export default function Viajes() {
       <section className="cta-sec">
         <h2>Tu itinerario perfecto te espera</h2>
         <p className="lead">Genera el prompt para tu próximo viaje en 30 segundos. Gratis, sin registro, sin tarjeta.</p>
-        <a href="/generar" className="btn-white">✨ Generar mi prompt de viaje gratis</a>
+        <a href="/generar" className="btn-white">Ver prompts de Viajes →</a>
         <p className="cta-note">Primer prompt gratis · 1,99€ por prompt · Sin suscripción</p>
+        <p className="cta-note" style={{ marginTop: 8 }}>¿Prefieres recibir la respuesta directamente sin salir? Disponible al personalizar cualquier prompt — desde 4,99€.</p>
       </section>
 
       <footer>

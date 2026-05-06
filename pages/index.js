@@ -277,10 +277,10 @@ export default function Home() {
     { q: "Que es un generador de prompts para ChatGPT?", a: "Un generador de prompts es una herramienta que construye automaticamente instrucciones optimizadas para IAs como ChatGPT, Claude o Gemini. En lugar de escribir una pregunta simple y recibir una respuesta generica, el generador construye un prompt con rol de experto, contexto detallado y objetivos claros para que la IA responda como un especialista." },
     { q: "Como hacer un buen prompt para ChatGPT?", a: "Un buen prompt para ChatGPT necesita cuatro elementos: un rol de experto especifico, tu situacion concreta con todos los detalles relevantes, el objetivo preciso que quieres conseguir, y las instrucciones sobre el formato de respuesta. promptbien.com construye todo esto automaticamente en 30 segundos." },
     { q: "Por que ChatGPT me da respuestas genericas?", a: "Las IAs responden en funcion de como les preguntas. Sin contexto especifico, la IA asume que debe dar una respuesta valida para cualquier persona. Con un prompt que incluye tu situacion concreta, un rol de experto y un objetivo claro, la IA puede darte una respuesta de nivel profesional personalizada." },
-    { q: "Funciona para viajes, salud e inmobiliario?", a: "Si. promptbien tiene prompts especialmente optimizados para planificar viajes con ChatGPT, preparar consultas medicas, y tomar decisiones inmobiliarias. Tambien funciona para cualquier otro tema con la opcion de consulta libre." },
+    { q: "¿Puedo recibir la respuesta directamente sin salir de promptbien?", a: "Sí. Desde el catálogo, al personalizar cualquier prompt, tienes dos opciones: obtener el prompt para usarlo en tu IA favorita (1,99€) o recibir la respuesta del experto directamente aquí en 30 segundos (4,99€). Sin abrir ChatGPT. Sin copiar nada. Sin salir del sitio." },
     { q: "Es gratis el generador de prompts?", a: "Tu primer prompt es completamente gratuito, sin registro. A partir del segundo, cada prompt tiene un coste de 1,99 euros de pago puntual. Sin suscripcion, sin compromiso, sin cuenta necesaria." },
+    { q: "Funciona para viajes, salud e inmobiliario?", a: "Si. promptbien tiene prompts especialmente optimizados para planificar viajes con ChatGPT, preparar consultas medicas, y tomar decisiones inmobiliarias. Tambien funciona para cualquier otro tema con la opcion de consulta libre." },
     { q: "Funciona con Claude y Gemini ademas de ChatGPT?", a: "Si. Al iniciar el proceso seleccionas la IA que usaras y el prompt se adapta especificamente para ella. ChatGPT, Claude y Gemini tienen caracteristicas distintas y los prompts generados estan optimizados para cada una." },
-    { q: "Como funciona el precio por prompt?", a: "El primer prompt es gratis para que compruebes el valor antes de pagar. A partir del segundo, cada prompt cuesta 1,99 euros — menos que un cafe. Pagas solo cuando lo necesitas, sin suscripcion ni compromiso." },
   ];
 
   const catalogItems = [
@@ -297,7 +297,7 @@ export default function Home() {
       <Head>
         <title>Generador de Prompts para ChatGPT, Claude y Gemini | promptbien.com</title>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="description" content="Genera el prompt perfecto para ChatGPT, Claude o Gemini en 30 segundos. Obtén respuestas de experto en viajes, salud, inmobiliario y cualquier tema. Gratis. Sin registro." />
+        <meta name="description" content="Genera el prompt perfecto para ChatGPT, Claude o Gemini — o recibe la respuesta del experto directamente aquí en 30 segundos. Gratis. Sin registro." />
         <meta name="keywords" content="generador de prompts, generador de prompts chatgpt, cómo hacer un buen prompt chatgpt, prompt para planificar viaje chatgpt, prompt para consulta medica ia, prompt inmobiliario chatgpt, prompt generator español" />
         <link rel="canonical" href="https://www.promptbien.com/" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -332,19 +332,9 @@ export default function Home() {
         <h1>Deja de recibir respuestas <em>genéricas</em> de la IA</h1>
         <p className="hero-sub">Describe tu situación en 30 segundos y te generamos el prompt perfecto para obtener respuestas de experto. Sin tecnicismos. Sin complicaciones.</p>
         <div className="hero-ctas">
-            <a href="/generar" className="btn-coral">✨ Generar mi prompt gratis</a>
-            <a href="#como-funciona" className="btn-white-outline">Ver cómo funciona</a>
+          <a href="/generar" className="btn-coral">✨ Generar mi prompt gratis</a>
+          <a href="#como-funciona" className="btn-white-outline">Ver cómo funciona</a>
         </div>
-        <a href="/catalogo" style={{ 
-            color: "rgba(255,255,255,0.55)", 
-            fontSize: ".85rem", 
-            fontWeight: 700, 
-            textDecoration: "none",
-            marginTop: "1rem",
-            display: "block"
-        }}>
-            ✦ Ver catálogo de prompts →
-        </a>
         <div className="hero-demo" role="img" aria-label="Vista previa del generador">
           <div className="demo-bar">
             <div className="demo-dot" style={{ background: "#FF5F57" }} />
@@ -404,7 +394,7 @@ export default function Home() {
             { icon: "🎯", n: "01", title: "Elige tu IA y tema", desc: "Selecciona si usarás ChatGPT, Claude o Gemini y el área de tu consulta. Cada IA tiene particularidades y los prompts se adaptan a cada una." },
             { icon: "✍️", n: "02", title: "Cuenta tu situación", desc: "Describe brevemente qué te ocurre y qué quieres conseguir. Cuanto más detalle, mejor será tu prompt. Sin jerga técnica." },
             { icon: "⚡", n: "03", title: "Generamos tu prompt", desc: "Nuestra IA construye el prompt perfecto con el rol de experto adecuado, tu contexto completo y las restricciones de calidad." },
-            { icon: "📋", n: "04", title: "Copia y pega en tu IA", desc: "Un clic para copiar. Pégalo en ChatGPT, Claude o Gemini. Obtén respuestas de nivel profesional al instante." },
+            { icon: "📋", n: "04", title: "Copia en tu IA — o recibe la respuesta aquí", desc: "Un clic para copiar y pegar en tu IA. O elige recibir la respuesta directamente aquí sin salir — disponible al personalizar cualquier prompt del catálogo." },
           ].map((s, i) => (
             <article className="step-card reveal" key={i} style={{ transitionDelay: `${i * 0.1}s` }}>
               <div className="step-n">{s.n}</div>
@@ -427,11 +417,14 @@ export default function Home() {
               <span className="catalog-card-badge" style={{ background: c.bg, color: c.color }}>{c.badge}</span>
               <h3>{c.title}</h3>
               <p>{c.desc}</p>
-              <span className="catalog-card-price">1,99€ · pago único</span>
+              <span className="catalog-card-price">Desde 1,99€ · pago único</span>
             </a>
           ))}
         </div>
         <div className="catalog-cta">
+          <p style={{ fontSize: ".9rem", fontWeight: 600, color: "rgba(255,255,255,.6)", marginBottom: "1.25rem", lineHeight: 1.65 }}>
+            Al personalizar cualquier prompt encontrarás dos opciones: obtener el prompt para tu IA (1,99€) o recibir la respuesta directamente aquí (4,99€).
+          </p>
           <a href="/catalogo" className="btn-catalog">Ver todos los prompts del catálogo →</a>
         </div>
       </section>
@@ -537,7 +530,7 @@ export default function Home() {
         <div className="eyebrow ctr">Precios</div>
         <h2 className="ctr" id="price-title">Prueba gratis. Paga solo lo que uses.</h2>
         <p className="lead ctr">Sin suscripción. Sin compromiso. Tu primer prompt es gratis para que veas el valor antes de pagar.</p>
-        <div className="price-grid">
+        <div className="price-grid" style={{ maxWidth: "1000px" }}>
           <article className="price-card reveal">
             <div className="price-plan">Primer prompt</div>
             <div className="price-amt">0€</div>
@@ -552,17 +545,30 @@ export default function Home() {
           </article>
           <article className="price-card feat reveal" style={{ transitionDelay: ".1s" }}>
             <div className="feat-badge">⚡ Menos que un café</div>
-            <div className="price-plan">Prompts adicionales</div>
+            <div className="price-plan">Prompt del catálogo</div>
             <div className="price-amt">1,99€</div>
             <div className="price-per">por prompt · pago puntual · sin suscripción</div>
             <ul className="price-feats">
-              <li>Paga solo cuando lo necesitas</li>
-              <li>Todos los temas disponibles</li>
-              <li>Prompts con contexto enriquecido</li>
+              <li>Prompt listo para copiar en tu IA</li>
+              <li>Casos concretos ya resueltos</li>
+              <li>Personalizable en 30 segundos</li>
               <li>Login con Google en un clic</li>
               <li>Soporte por email</li>
             </ul>
-            <a href="/generar" className="price-btn price-btn-paid">Empezar ahora</a>
+            <a href="/catalogo" className="price-btn price-btn-paid">Ver el catálogo</a>
+          </article>
+          <article className="price-card reveal" style={{ transitionDelay: ".2s" }}>
+            <div className="price-plan">⚡ Consulta directa</div>
+            <div className="price-amt">4,99€</div>
+            <div className="price-per">por consulta · pago puntual · sin suscripción</div>
+            <ul className="price-feats">
+              <li>La respuesta del experto aquí mismo</li>
+              <li>Sin abrir ChatGPT ni Claude</li>
+              <li>Sin copiar ni pegar nada</li>
+              <li>Resultado en menos de 30 segundos</li>
+              <li>Login con Google en un clic</li>
+            </ul>
+            <a href="/catalogo" className="price-btn price-btn-free">Ver el catálogo</a>
           </article>
         </div>
       </section>

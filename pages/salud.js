@@ -144,7 +144,7 @@ export default function Salud() {
         <div className="hero-badge">🩺 Prompts para Salud</div>
         <h1>Llega a tu consulta médica <em>bien informado</em></h1>
         <p className="hero-sub">Genera el prompt perfecto para entender tu diagnóstico, preparar preguntas para el médico y tomar decisiones de salud informadas. Con ChatGPT, Claude o Gemini.</p>
-        <a href="/generar" className="btn-coral">✨ Generar mi prompt de salud gratis</a>
+        <a href="/catalogo?category=salud" className="btn-coral">Ver prompts de Salud →</a>
       </header>
 
       <section>
@@ -227,8 +227,9 @@ export default function Salud() {
       <section className="cta-sec">
         <h2>Llega informado a tu próxima consulta</h2>
         <p className="lead">Genera el prompt perfecto para salud en 30 segundos. Gratis, sin registro, sin tarjeta.</p>
-        <a href="/generar" className="btn-white">✨ Generar mi prompt de salud gratis</a>
+        <a href="/generar" className="btn-white">Ver prompts de Salud →</a>
         <p className="cta-note">Primer prompt gratis · 1,99€ por prompt · Sin suscripción</p>
+        <p className="cta-note" style={{ marginTop: 8 }}>¿Prefieres recibir la respuesta directamente sin salir? Disponible al personalizar cualquier prompt — desde 4,99€.</p>
       </section>
 
       <footer>

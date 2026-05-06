@@ -52,18 +52,47 @@ const CSS = `
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
 
-  .card { background: white; border-radius: 24px; border: 2px solid #E8E8F5; padding: 28px; cursor: pointer; transition: all .25s; position: relative; }
+  .card { background: white; border-radius: 24px; border: 2px solid #E8E8F5; padding: 28px; padding-bottom: 32px; cursor: pointer; transition: all .25s; position: relative; overflow: hidden; }
   .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(91,75,245,.12); border-color: #C8C8F5; }
+  .card:hover .card-hover-prices { opacity: 1; transform: translateY(0); }
+  .card:hover .card-footer { opacity: 0; pointer-events: none; }
   .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
   .card-badge { font-size: .72rem; font-weight: 800; padding: 4px 12px; border-radius: 100px; text-transform: capitalize; letter-spacing: .03em; }
   .card-uses { font-size: .75rem; font-weight: 800; color: #5B4BF5; background: #F0EEFF; padding: 3px 10px; border-radius: 100px; }
+  .card-popular { font-size: .72rem; font-weight: 800; color: white; background: linear-gradient(135deg, #FF6B4A, #FF9F0A); padding: 3px 10px; border-radius: 100px; }
   .card h3 { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 900; color: #1A1A2E; margin-bottom: .4rem; line-height: 1.3; letter-spacing: -.01em; }
   .card-subtitle { font-size: .85rem; font-weight: 600; color: #8A8AAA; margin-bottom: 1rem; }
   .card-preview { font-size: .85rem; font-weight: 600; color: #4A4A6A; line-height: 1.6; margin-bottom: 1.25rem; font-style: italic; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; transition: opacity .2s; }
   .card-price { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 900; color: #1A1A2E; }
   .card-btn { background: #5B4BF5; color: white; font-family: 'Nunito', sans-serif; font-size: .82rem; font-weight: 800; padding: 8px 18px; border-radius: 100px; border: none; cursor: pointer; transition: all .2s; }
   .card-btn:hover { background: #4A3AE0; transform: translateY(-1px); }
+
+  /* HOVER PRICES — aparecen al hover */
+  .card-hover-prices { position: absolute; bottom: 0; left: 0; right: 0; background: white; border-top: 1.5px solid #E8E8F5; padding: 16px 28px; display: flex; flex-direction: column; gap: 8px; opacity: 0; transform: translateY(8px); transition: all .22s ease; pointer-events: none; }
+  .card:hover .card-hover-prices { pointer-events: auto; }
+  .hover-btn { width: 100%; padding: 10px 16px; border-radius: 100px; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: .85rem; font-weight: 800; transition: all .2s; text-align: center; }
+  .hover-btn-prompt { background: #F0EEFF; color: #5B4BF5; }
+  .hover-btn-prompt:hover { background: #E0DCFF; }
+  .hover-btn-consult { background: #5B4BF5; color: white; box-shadow: 0 4px 14px rgba(91,75,245,.3); }
+  .hover-btn-consult:hover { background: #4A3AE0; transform: translateY(-1px); }
+
+  /* GENERIC CARD — ancho completo, estilo especial */
+  .card-generic { background: linear-gradient(135deg, #5B4BF5 0%, #7C6BFF 100%); border: none; color: white; grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; padding: 28px 32px; }
+  .card-generic:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(91,75,245,.35); border-color: transparent; }
+  .card-generic:hover .card-hover-prices { background: rgba(255,255,255,.08); border-top-color: rgba(255,255,255,.15); }
+  .card-generic:hover .hover-btn-prompt { background: rgba(255,255,255,.15); color: white; }
+  .card-generic:hover .hover-btn-consult { background: #FF6B4A; box-shadow: 0 4px 14px rgba(255,107,74,.4); }
+  .card-generic h3 { color: white; font-size: 1.2rem; }
+  .card-generic .card-subtitle { color: rgba(255,255,255,.7); margin-bottom: 0; }
+  .card-generic .card-badge { background: rgba(255,255,255,.15); color: white; }
+  .card-generic .card-uses { background: rgba(255,255,255,.15); color: rgba(255,255,255,.9); }
+  .card-generic .card-price { color: white; }
+  .card-generic .card-preview { color: rgba(255,255,255,.75); }
+  .card-generic .card-btn { background: white; color: #5B4BF5; }
+  .card-generic-left { flex: 1; min-width: 240px; }
+  .card-generic-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .card-generic-tag { font-size: .75rem; font-weight: 800; background: rgba(255,255,255,.15); color: rgba(255,255,255,.9); padding: 4px 12px; border-radius: 100px; letter-spacing: .04em; }
 
   .empty { text-align: center; padding: 4rem 2rem; color: #8A8AAA; }
   .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
@@ -174,7 +203,7 @@ export default function Catalogo() {
     <>
       <Head>
         <title>Catálogo de Prompts | promptbien.com</title>
-        <meta name="description" content="Prompts premium pregenerados para ChatGPT, Claude y Gemini. Elige tu caso, personaliza en 30 segundos y cópialo." />
+        <meta name="description" content="Prompts premium para ChatGPT, Claude y Gemini — o recibe la respuesta del experto directamente aquí. Elige tu caso y personaliza en 30 segundos." />
         <link rel="canonical" href="https://www.promptbien.com/catalogo" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
@@ -191,8 +220,8 @@ export default function Catalogo() {
 
       <div className="hero">
         <div className="hero-badge">✦ Prompts Premium</div>
-        <h1>El prompt <em>exacto</em> para tu situación</h1>
-        <p className="hero-sub">Casos concretos ya resueltos. Elige el tuyo, personaliza 3 campos y tenlo listo en 30 segundos.</p>
+        <h1>El prompt exacto — o la respuesta directa. Tú eliges.</h1>
+        <p className="hero-sub">Casos concretos ya resueltos. Personaliza en 30 segundos y llévate el prompt — o recibe la respuesta del experto aquí mismo.</p>
         <div className="hero-stats">
           <div className="hero-stat">
             <div className="hero-stat-n">{prompts.length || "6"}+</div>
@@ -203,8 +232,8 @@ export default function Catalogo() {
             <div className="hero-stat-l">veces usados</div>
           </div>
           <div className="hero-stat">
-            <div className="hero-stat-n">1,99€</div>
-            <div className="hero-stat-l">por prompt</div>
+            <div className="hero-stat-n">Desde 1,99€</div>
+            <div className="hero-stat-l">por consulta</div>
           </div>
         </div>
       </div>
@@ -222,8 +251,13 @@ export default function Catalogo() {
           ))}
         </div>
 
-        {loading ? (
-          <div style={{ textAlign: "center", padding: "4rem", color: "#8A8AAA" }}>
+        <div style={{ background: "#F0EEFF", border: "1.5px solid #C8C8F5", borderRadius: 16, padding: "16px 20px", marginBottom: 24, fontSize: ".9rem", fontWeight: 600, color: "#4A4A6A", lineHeight: 1.65 }}>
+          Al personalizar cualquier prompt tienes dos opciones:<br />
+          <strong style={{ color: "#1A1A2E" }}>🔒 Obtener el prompt para tu IA — 1,99€.</strong> Lo copias y lo usas en ChatGPT, Claude o Gemini.<br />
+          <strong style={{ color: "#1A1A2E" }}>⚡ Consultar directamente aquí — 4,99€.</strong> Recibes la respuesta del experto en pantalla en menos de 30 segundos. Sin abrir ninguna otra app.
+        </div>
+
+        {loading ? (          <div style={{ textAlign: "center", padding: "4rem", color: "#8A8AAA" }}>
             <div style={{ width: 32, height: 32, border: "3px solid #E8E8F5", borderTopColor: "#5B4BF5", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto 1rem" }} />
             Cargando prompts...
           </div>
@@ -236,6 +270,34 @@ export default function Catalogo() {
           <div className="grid">
             {prompts.map((prompt, i) => {
               const cat = CATEGORY_CONFIG[prompt.category] || {};
+              const isGeneric = prompt.slug?.endsWith('-consulta-libre');
+              const isPopular = prompt.uses_count >= 30;
+
+              if (isGeneric) {
+                return (
+                  <div
+                    key={prompt.id}
+                    className="card card-generic fade-in"
+                    style={{ animationDelay: `${i * 0.06}s` }}
+                    onClick={() => openModal(prompt)}
+                  >
+                    <div className="card-generic-left">
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: ".75rem" }}>
+                        <span className="card-generic-tag">✦ A tu medida</span>
+                        {prompt.uses_count > 0 && <span className="card-uses">{prompt.uses_count} usos</span>}
+                      </div>
+                      <h3>{prompt.title}</h3>
+                      <p className="card-subtitle">{prompt.subtitle}</p>
+                    </div>
+                    <div className="card-generic-right">
+                      <button className="card-btn" onClick={e => { e.stopPropagation(); openModal(prompt); }}>
+                        Cuéntanos tu caso →
+                      </button>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <div
                   key={prompt.id}
@@ -244,23 +306,29 @@ export default function Catalogo() {
                   onClick={() => openModal(prompt)}
                 >
                   <div className="card-top">
-                    <span
-                      className="card-badge"
-                      style={{ background: cat.bg, color: cat.color }}
-                    >
+                    <span className="card-badge" style={{ background: cat.bg, color: cat.color }}>
                       {cat.emoji} {prompt.category}
                     </span>
-                    {prompt.uses_count > 0 && (
-                      <span className="card-uses">{prompt.uses_count} usos</span>
-                    )}
+                    <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                      {isPopular && <span className="card-popular">🔥 Popular</span>}
+                      {!isPopular && prompt.uses_count > 0 && <span className="card-uses">{prompt.uses_count} usos</span>}
+                    </div>
                   </div>
                   <h3>{prompt.title}</h3>
                   <p className="card-subtitle">{prompt.subtitle}</p>
                   <p className="card-preview">"{prompt.preview_text}"</p>
                   <div className="card-footer">
-                    <span className="card-price">1,99€</span>
+                    <span className="card-price">Desde 1,99€</span>
                     <button className="card-btn" onClick={e => { e.stopPropagation(); openModal(prompt); }}>
                       Personalizar →
+                    </button>
+                  </div>
+                  <div className="card-hover-prices">
+                    <button className="hover-btn hover-btn-prompt" onClick={e => { e.stopPropagation(); openModal(prompt); }}>
+                      🔒 Obtener el prompt — 1,99€
+                    </button>
+                    <button className="hover-btn hover-btn-consult" onClick={e => { e.stopPropagation(); openModal(prompt); }}>
+                      ⚡ Consultar directamente — 4,99€
                     </button>
                   </div>
                 </div>
@@ -317,13 +385,14 @@ export default function Catalogo() {
 
             <div className="modal-divider" />
             <div className="modal-footer">
+              <p style={{ fontSize: ".88rem", fontWeight: 700, color: "#4A4A6A", textAlign: "center", marginBottom: 14 }}>¿Cómo quieres recibir tu consulta?</p>
               <button className="btn-pay" onClick={() => handlePay("catalog")} disabled={paying}>
                 {paying === "catalog" ? "Redirigiendo..." : "🔒 Obtener el prompt — 1,99€"}
               </button>
               <div className="modal-price-note" style={{ textAlign: "center", margin: "6px 0" }}>Para usar en ChatGPT, Claude o Gemini</div>
 
               <button className="btn-pay btn-consultation" onClick={() => handlePay("consultation")} disabled={paying} style={{ marginTop: 10, background: "#5B4BF5" }}>
-                {paying === "consultation" ? "Redirigiendo..." : "⚡ Consultar directamente — 4,99€"}
+                {paying === "consultation" ? "Redirigiendo..." : "⚡ Consultar directamente — 3,99€"}
               </button>
               <div className="modal-price-note" style={{ textAlign: "center", margin: "6px 0" }}>Recibe la respuesta ahora. Sin salir de aquí.</div>
 

@@ -144,7 +144,7 @@ export default function Familia() {
         <div className="hero-badge">👨‍👩‍👧 Prompts para Familia</div>
         <h1>Los momentos familiares difíciles <em>merecen perspectiva</em></h1>
         <p className="hero-sub">Genera el prompt perfecto para navegar un divorcio, reconectar con un hijo adolescente, gestionar una herencia o cuidar a tus padres. Con ChatGPT, Claude o Gemini.</p>
-        <a href="/generar" className="btn-coral">✨ Generar mi prompt familiar gratis</a>
+        <a href="/catalogo?category=familia" className="btn-coral">Ver prompts de Familia →</a>
       </header>
 
       <section>
@@ -227,8 +227,9 @@ export default function Familia() {
       <section className="cta-sec">
         <h2>La perspectiva que necesitas te espera</h2>
         <p className="lead">Genera el prompt perfecto para tu situación familiar en 30 segundos. Gratis, sin registro.</p>
-        <a href="/generar" className="btn-dark">✨ Generar mi prompt familiar gratis</a>
+        <a href="/generar" className="btn-dark">Ver prompts de Familia →</a>
         <p className="cta-note">Primer prompt gratis · 1,99€ por prompt · Sin suscripción</p>
+        <p className="cta-note" style={{ marginTop: 8 }}>¿Prefieres recibir la respuesta directamente sin salir? Disponible al personalizar cualquier prompt — desde 4,99€.</p>
       </section>
 
       <footer>

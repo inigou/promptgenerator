@@ -144,7 +144,7 @@ export default function Finanzas() {
         <div className="hero-badge">💰 Prompts para Finanzas</div>
         <h1>Tu asesor financiero <em>independiente</em> en 30 segundos</h1>
         <p className="hero-sub">Genera el prompt perfecto para invertir mejor, planificar tu jubilación o decidir qué hacer con tus ahorros. Con ChatGPT, Claude o Gemini.</p>
-        <a href="/generar" className="btn-coral">✨ Generar mi prompt financiero gratis</a>
+        <a href="/catalogo?category=finanzas" className="btn-coral">Ver prompts de Finanzas →</a>
       </header>
 
       <section>
@@ -227,8 +227,9 @@ export default function Finanzas() {
       <section className="cta-sec">
         <h2>Tu análisis financiero te espera</h2>
         <p className="lead">Genera el prompt perfecto para tu próxima decisión financiera en 30 segundos. Gratis, sin registro.</p>
-        <a href="/generar" className="btn-white">✨ Generar mi prompt financiero gratis</a>
+        <a href="/generar" className="btn-white">Ver prompts de Finanzas →</a>
         <p className="cta-note">Primer prompt gratis · 1,99€ por prompt · Sin suscripción</p>
+        <p className="cta-note" style={{ marginTop: 8 }}>¿Prefieres recibir la respuesta directamente sin salir? Disponible al personalizar cualquier prompt — desde 4,99€.</p>
       </section>
 
       <footer>

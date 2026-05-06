@@ -144,7 +144,7 @@ export default function Emprender() {
         <div className="hero-badge">🚀 Prompts para Emprender</div>
         <h1>La IA puede ser tu <em>mentor de negocio</em> si sabes preguntarle bien</h1>
         <p className="hero-sub">Genera el prompt perfecto para validar tu idea, hacer tu plan de empresa o conseguir tus primeros clientes con ChatGPT, Claude o Gemini.</p>
-        <a href="/generar" className="btn-coral">✨ Generar mi prompt de negocio gratis</a>
+        <a href="/catalogo?category=emprender" className="btn-coral">Ver prompts de Emprender →</a>
       </header>
 
       <section>
@@ -227,8 +227,9 @@ export default function Emprender() {
       <section className="cta-sec">
         <h2>Tu mentor de negocio te espera</h2>
         <p className="lead">Genera el prompt perfecto para tu próxima decisión de negocio en 30 segundos. Gratis, sin registro.</p>
-        <a href="/generar" className="btn-white">✨ Generar mi prompt de negocio gratis</a>
+        <a href="/generar" className="btn-white">Ver prompts de Emprender →</a>
         <p className="cta-note">Primer prompt gratis · 1,99€ por prompt · Sin suscripción</p>
+        <p className="cta-note" style={{ marginTop: 8 }}>¿Prefieres recibir la respuesta directamente sin salir? Disponible al personalizar cualquier prompt — desde 4,99€.</p>
       </section>
 
       <footer>
