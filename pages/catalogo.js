@@ -392,7 +392,7 @@ export default function Catalogo() {
               <div className="modal-price-note" style={{ textAlign: "center", margin: "6px 0" }}>Para usar en ChatGPT, Claude o Gemini</div>
 
               <button className="btn-pay btn-consultation" onClick={() => handlePay("consultation")} disabled={paying} style={{ marginTop: 10, background: "#5B4BF5" }}>
-                {paying === "consultation" ? "Redirigiendo..." : "⚡ Consultar directamente — 3,99€"}
+                {paying === "consultation" ? "Redirigiendo..." : "⚡ Consultar directamente — 4,99€"}
               </button>
               <div className="modal-price-note" style={{ textAlign: "center", margin: "6px 0" }}>Recibe la respuesta ahora. Sin salir de aquí.</div>
 
