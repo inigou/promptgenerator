@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
-import CatalogCards from "../components/CatalogCards";
+import TopPrompts from "../components/TopPrompts";
 
 const TEMA_EMOJI = {
   viajes: "✈️", salud: "🩺", inmobiliario: "🏠", otro: "💬"
@@ -309,11 +309,7 @@ export default function MisPrompts() {
               63 prompts listos para personalizar en salud, finanzas, inmobiliario y más.
             </p>
           </div>
-          <CatalogCards
-            categoria="salud"
-            titulo=""
-            eyebrow=""
-          />
+          <TopPrompts />
           <div style={{ textAlign: "center", padding: "0 1.5rem 1rem" }}>
             <a href="/catalogo" style={{ display: "inline-block", background: "rgba(255,255,255,.12)", color: "white", fontFamily: "'Nunito', sans-serif", fontSize: ".95rem", fontWeight: 800, padding: "12px 32px", borderRadius: 100, textDecoration: "none", border: "1.5px solid rgba(255,255,255,.2)", transition: "all .2s" }}>
               Ver los 63 prompts del catálogo →
