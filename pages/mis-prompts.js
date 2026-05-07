@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
+import CatalogCards from "../components/CatalogCards";
 
 const TEMA_EMOJI = {
   viajes: "✈️", salud: "🩺", inmobiliario: "🏠", otro: "💬"
@@ -293,6 +294,33 @@ export default function MisPrompts() {
         )}
 
       </div>
+
+      {/* CROSSELL — Catálogo */}
+      {session && (
+        <div style={{ position: "relative", zIndex: 1, marginBottom: 60 }}>
+          <div style={{ textAlign: "center", padding: "3rem clamp(1.5rem,5vw,4rem) 0" }}>
+            <div style={{ fontSize: ".75rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", marginBottom: ".6rem" }}>
+              Catálogo de prompts
+            </div>
+            <h2 style={{ fontFamily: "'Nunito', sans-serif", fontSize: "clamp(1.4rem,3vw,2rem)", fontWeight: 900, color: "white", letterSpacing: "-.02em", marginBottom: ".5rem" }}>
+              ¿Buscas algo concreto?
+            </h2>
+            <p style={{ fontSize: ".95rem", fontWeight: 600, color: "rgba(255,255,255,.55)", maxWidth: 480, margin: "0 auto" }}>
+              63 prompts listos para personalizar en salud, finanzas, inmobiliario y más.
+            </p>
+          </div>
+          <CatalogCards
+            categoria="salud"
+            titulo=""
+            eyebrow=""
+          />
+          <div style={{ textAlign: "center", padding: "0 1.5rem 1rem" }}>
+            <a href="/catalogo" style={{ display: "inline-block", background: "rgba(255,255,255,.12)", color: "white", fontFamily: "'Nunito', sans-serif", fontSize: ".95rem", fontWeight: 800, padding: "12px 32px", borderRadius: 100, textDecoration: "none", border: "1.5px solid rgba(255,255,255,.2)", transition: "all .2s" }}>
+              Ver los 63 prompts del catálogo →
+            </a>
+          </div>
+        </div>
+      )}
 
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 20, padding: "10px", zIndex: 50, background: "rgba(91,75,245,0.5)", backdropFilter: "blur(10px)", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
         {[["Privacidad", "/privacidad"], ["Términos", "/terminos"], ["Cookies", "/cookies"]].map(([label, href]) => (
