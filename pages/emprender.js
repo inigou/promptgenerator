@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
-
+import CatalogCards from "../components/CatalogCards";
 const schemaFAQ = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -144,7 +144,7 @@ export default function Emprender() {
         <div className="hero-badge">🚀 Prompts para Emprender</div>
         <h1>La IA puede ser tu <em>mentor de negocio</em> si sabes preguntarle bien</h1>
         <p className="hero-sub">Genera el prompt perfecto para validar tu idea, hacer tu plan de empresa o conseguir tus primeros clientes con ChatGPT, Claude o Gemini.</p>
-        <a href="/catalogo?category=emprender" className="btn-coral">Ver prompts de Emprender →</a>
+        <a href="#consultas-emprender" className="btn-coral">Ver prompts de Emprender →</a>
       </header>
 
       <section>
@@ -168,27 +168,12 @@ export default function Emprender() {
         </div>
       </section>
 
-      <section className="examples-sec">
-        <div className="eyebrow">Ejemplos de prompts para emprendedores</div>
-        <h2>Qué puedes conseguir con el prompt correcto</h2>
-        <p className="lead">Desde validar si tu idea tiene mercado hasta preparar tu primera reunión con un inversor.</p>
-        <div className="examples-grid">
-          {[
-            { emoji: "🔍", title: "Validar una idea sin dinero", desc: "Qué experimentos hacer en 2-4 semanas para saber si hay mercado real antes de invertir un euro.", tag: "Validación" },
-            { emoji: "📋", title: "Plan de negocio que sirve", desc: "Estructura realista con proyecciones financieras honestas adaptadas a tu modelo y recursos.", tag: "Planificación" },
-            { emoji: "👥", title: "Primeros clientes sin presupuesto", desc: "Estrategia concreta para conseguir los primeros 10-20 clientes de pago usando solo tu red.", tag: "Ventas" },
-            { emoji: "💰", title: "Fijar precios que no regalen valor", desc: "Cómo calcular el precio mínimo sostenible y cómo subir precios a clientes actuales sin perderlos.", tag: "Pricing" },
-            { emoji: "🚀", title: "El salto de empleado a emprendedor", desc: "Cuándo estás realmente listo para dar el salto y cómo prepararlo para minimizar el riesgo.", tag: "Transición" },
-            { emoji: "📈", title: "Escalar sin quemarte", desc: "Cómo pasar de depender todo de ti a tener un sistema que funcione sin tu presencia constante.", tag: "Crecimiento" },
-          ].map((e, i) => (
-            <article className="example-card reveal" key={i} style={{ transitionDelay: `${i * 0.1}s` }}>
-              <span className="example-emoji">{e.emoji}</span>
-              <h3 className="example-title">{e.title}</h3>
-              <p className="example-desc">{e.desc}</p>
-              <span className="example-tag">{e.tag}</span>
-            </article>
-          ))}
-        </div>
+      <section id="consultas-emprender" style={{ padding: 0 }}>
+        <CatalogCards
+          categoria="emprender"
+          titulo="Elige tu consulta de negocio"
+          eyebrow="Prompts del catálogo"
+        />
       </section>
 
       <section>

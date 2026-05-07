@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
-
+import CatalogCards from "../components/CatalogCards";
 const schemaFAQ = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -144,7 +144,7 @@ export default function Finanzas() {
         <div className="hero-badge">💰 Prompts para Finanzas</div>
         <h1>Tu asesor financiero <em>independiente</em> en 30 segundos</h1>
         <p className="hero-sub">Genera el prompt perfecto para invertir mejor, planificar tu jubilación o decidir qué hacer con tus ahorros. Con ChatGPT, Claude o Gemini.</p>
-        <a href="/catalogo?category=finanzas" className="btn-coral">Ver prompts de Finanzas →</a>
+        <a href="#consultas-finanzas" className="btn-coral">Ver prompts de Finanzas →</a>
       </header>
 
       <section>
@@ -168,27 +168,12 @@ export default function Finanzas() {
         </div>
       </section>
 
-      <section className="examples-sec">
-        <div className="eyebrow">Ejemplos de prompts para finanzas</div>
-        <h2>Qué puedes conseguir con el prompt correcto</h2>
-        <p className="lead">Desde empezar a invertir desde cero hasta planificar la jubilación con números reales.</p>
-        <div className="examples-grid">
-          {[
-            { emoji: "📈", title: "Empezar a invertir desde cero", desc: "Qué productos elegir según tu perfil, horizonte y objetivos. Sin jerga financiera ni productos que le interesan al banco.", tag: "Inversión" },
-            { emoji: "🏖️", title: "Planificar la jubilación", desc: "Cuánto necesitas ahorrar, qué pensión puedes esperar y si vas bien encaminado con lo que tienes ahora.", tag: "Jubilación" },
-            { emoji: "💵", title: "Qué hacer con mis ahorros", desc: "Comparativa objetiva entre depósitos, letras del tesoro, fondos y inmobiliario para tu situación concreta.", tag: "Ahorros" },
-            { emoji: "📋", title: "Optimizar la declaración de la renta", desc: "Qué deducciones no estás aprovechando y qué hacer antes del 31 de diciembre para pagar menos.", tag: "Fiscal" },
-            { emoji: "⚖️", title: "Plan de pensiones vs fondos indexados", desc: "La comparativa que tu banco nunca te hará, con los números reales de tu tramo de IRPF.", tag: "Decisión" },
-            { emoji: "🗂️", title: "Poner orden en mis finanzas", desc: "Fondo de emergencia, deudas y presupuesto: por dónde empezar cuando todo está mezclado.", tag: "Orden" },
-          ].map((e, i) => (
-            <article className="example-card reveal" key={i} style={{ transitionDelay: `${i * 0.1}s` }}>
-              <span className="example-emoji">{e.emoji}</span>
-              <h3 className="example-title">{e.title}</h3>
-              <p className="example-desc">{e.desc}</p>
-              <span className="example-tag">{e.tag}</span>
-            </article>
-          ))}
-        </div>
+      <section id="consultas-finanzas" style={{ padding: 0 }}>
+        <CatalogCards
+          categoria="finanzas"
+          titulo="Elige tu consulta financiera"
+          eyebrow="Prompts del catálogo"
+        />
       </section>
 
       <section>

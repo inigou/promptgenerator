@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
+import CatalogCards from "../components/CatalogCards";
 
 const schemaFAQ = {
   "@context": "https://schema.org",
@@ -144,7 +145,7 @@ export default function Inmobiliario() {
         <div className="hero-badge">🏠 Prompts para Inmobiliario</div>
         <h1>Toma decisiones inmobiliarias <em>con información real</em></h1>
         <p className="hero-sub">Genera el prompt perfecto para analizar hipotecas, compra, venta e inversión con ChatGPT, Claude o Gemini. Lo que tu banco no te explica bien, la IA sí puede.</p>
-        <a href="/catalogo?category=inmobiliario" className="btn-coral">Ver prompts de Inmobiliario →</a>
+        <a href="#consultas-inmobiliario" className="btn-coral">Ver prompts de Inmobiliario →</a>
       </header>
 
       <section>
@@ -168,27 +169,12 @@ export default function Inmobiliario() {
         </div>
       </section>
 
-      <section className="examples-sec">
-        <div className="eyebrow">Ejemplos de prompts inmobiliarios</div>
-        <h2>Qué puedes analizar con el prompt correcto</h2>
-        <p className="lead">Desde decidir si amortizar hipoteca hasta evaluar si comprar para alquilar tiene sentido en tu ciudad.</p>
-        <div className="examples-grid">
-          {[
-            { emoji: "💰", title: "Amortizar vs invertir", desc: "Análisis numérico de si conviene usar ahorros para amortizar hipoteca o invertirlos en fondos indexados, con tu tipo de interés real.", tag: "Hipoteca" },
-            { emoji: "🏘️", title: "Comprar para alquilar", desc: "Rentabilidad real de una inversión inmobiliaria en tu ciudad, con precios actuales, gastos reales y retorno esperado.", tag: "Inversión" },
-            { emoji: "🔄", title: "Cambio de hipoteca", desc: "Análisis de si conviene subrogar, novación o cancelar y contratar nueva hipoteca con las condiciones actuales del mercado.", tag: "Hipoteca" },
-            { emoji: "🏠", title: "Comprar vs alquilar", desc: "Comparativa financiera real para tu situación: ingresos, ahorros, estabilidad laboral y mercado de tu zona.", tag: "Decisión" },
-            { emoji: "📝", title: "Negociar precio de compra", desc: "Qué argumentos usar y qué margen de negociación es razonable según el mercado y el estado del inmueble.", tag: "Compra" },
-            { emoji: "🔑", title: "Primera vivienda con ayudas", desc: "Qué ayudas públicas están disponibles para primera vivienda en tu comunidad autónoma y cómo acceder a ellas.", tag: "Primera vivienda" },
-          ].map((e, i) => (
-            <article className="example-card reveal" key={i} style={{ transitionDelay: `${i * 0.1}s` }}>
-              <span className="example-emoji">{e.emoji}</span>
-              <h3 className="example-title">{e.title}</h3>
-              <p className="example-desc">{e.desc}</p>
-              <span className="example-tag">{e.tag}</span>
-            </article>
-          ))}
-        </div>
+      <section id="consultas-inmobiliario" style={{ padding: 0 }}>
+        <CatalogCards
+          categoria="inmobiliario"
+          titulo="Elige tu consulta inmobiliaria"
+          eyebrow="Prompts del catálogo"
+        />
       </section>
 
       <section>
